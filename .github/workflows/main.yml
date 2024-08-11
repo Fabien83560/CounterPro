@@ -22,6 +22,23 @@ jobs:
         source: "."
         target: "/~/CounterPro"
 
+    - name: Create config file on VPS
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          echo 'module.exports = {
+                  token: "${{ secrets.BOT_TOKEN }}",
+                  applicationClientId: "${{ secrets.CLIENT_ID }}",
+                  databaseHost: "${{ secrets.DB_HOST }}",
+                  databaseUser: "${{ secrets.DB_USER }}",
+                  databasePassword: "${{ secrets.DB_PASSWORD }}",
+                  databaseName: "${{ secrets.DB_NAME }}",
+                  databasePort: 3306
+              }' > /~/CounterPro/config.js
+
     - name: Restart Docker container
       uses: appleboy/ssh-action@v0.1.7
       with:
@@ -31,5 +48,4 @@ jobs:
         script: |
           cd /~/CounterPro
           docker-compose down
-          docker-compose build --no-cache
-          docker-compose up -d
+          docker-compose up -d --build
