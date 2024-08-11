@@ -25,7 +25,7 @@ module.exports = async bot => {
         await loadSlashCommands(bot);
 
         function getVersionFromReadme() {
-            const readmePath = path.join(__dirname, '..', 'README.md');
+            const readmePath = path.join('/', 'README.md');
             const readmeContent = fs.readFileSync(readmePath, 'utf-8');
             const versionMatch = readmeContent.match(/Current Version: `(\d+\.\d+\.\d+)`/);
             return versionMatch ? versionMatch[1] : null;
