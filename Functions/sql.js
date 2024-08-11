@@ -141,6 +141,29 @@ async function updateHexOfUser(user_id, new_hex) {
     }
 }
 
+async function selectLastVersion() {
+    const query = "SELECT * FROM version ORDER BY inserted_at DESC LIMIT 1";
+    const params = [];
+
+    try {
+        const results = await executeQuery(query, params);
+        return results;
+    } catch (error) {
+        console.error("Failed to select last version:", error.message);
+    }
+}
+
+async function insertVersion(version) {
+    const query = "INSERT INTO version (version_number) VALUES (?)";
+    const params = [version];
+
+    try {
+        const results = await executeQuery(query, params);
+    } catch (error) {
+        console.error(`Failed to insert version for version ${version}:`, error.message);
+    }
+}
+
 module.exports = {
     addLog,
     insertUser,
@@ -153,5 +176,7 @@ module.exports = {
     selectDiscordServerByServerId,
     insertDiscordServer,
     insertCounter,
-    updateHexOfUser
+    updateHexOfUser,
+    selectLastVersion,
+    insertVersion
 };
