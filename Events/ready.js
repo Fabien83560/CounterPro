@@ -25,7 +25,13 @@ module.exports = async bot => {
         await loadSlashCommands(bot);
 
         function getVersionFromReadme() {
-            const readmePath = path.join('/', 'README.md');
+            const readmePath = path.join(__dirname, '..', 'README.md');
+
+            if (!fs.existsSync(readmePath)) {
+                console.error(`File not found: ${readmePath}`);
+                return null;
+            }
+
             const readmeContent = fs.readFileSync(readmePath, 'utf-8');
             const versionMatch = readmeContent.match(/Current Version: `(\d+\.\d+\.\d+)`/);
             return versionMatch ? versionMatch[1] : null;
@@ -43,10 +49,9 @@ module.exports = async bot => {
             let embed = await getEmbed(
                 'INFO',
                 `A new version of ${bot.user.username} has been released (${version}).`,
-                `**${commit.commit.committer.name}** published a new update\nThe new functionality will allow __${commit.commit.message}__\n
-                \n
-                For more information about the development of ${bot.user.username} go to the github: ${commit.author.html_url}/${bot.user.username}`
+                `**${commit.commit.committer.name}** published a new update\nThe new functionality will allow __${commit.commit.message}__\n\nFor more information about the development of ${bot.user.username} go to the github: ${commit.author.html_url}/${bot.user.username}`
             );
+
             const response = await fetch(webhookUrl, {
                 method: 'POST',
                 headers: {
