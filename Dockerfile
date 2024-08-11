@@ -5,4 +5,6 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 
+RUN ls -l /usr/src/app
+
 CMD [ "node", "main.js" ]
