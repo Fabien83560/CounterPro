@@ -14,8 +14,7 @@ module.exports = async bot => {
         });
 
         await loadSlashCommands(bot);
-
-        console.log();
+        console.log("")
         console.log(`${bot.user.username} : Online on ${bot.guilds.cache.size} servers!`);
 
     } catch (error) {
