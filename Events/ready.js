@@ -25,7 +25,7 @@ module.exports = async bot => {
         await loadSlashCommands(bot);
 
         function getVersionFromReadme() {
-            const readmePath = path.join(__dirname, '..', 'README.md');
+            const readmePath = path.join(__dirname, '..', 'readme.md');
             
             if (!fs.existsSync(readmePath)) {
                 console.error(`File not found: ${readmePath}`);
