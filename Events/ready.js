@@ -26,7 +26,6 @@ module.exports = async bot => {
 
         function getVersionFromReadme() {
             const readmePath = path.join(__dirname, '..', 'README.md');
-            console.log(`Attempting to read README.md from path: ${readmePath}`);
             
             if (!fs.existsSync(readmePath)) {
                 console.error(`File not found: ${readmePath}`);
@@ -34,7 +33,6 @@ module.exports = async bot => {
             }
 
             const readmeContent = fs.readFileSync(readmePath, 'utf-8');
-            console.log(`Readme content: ${readmeContent}`);
 
             const versionMatch = readmeContent.match(/Current Version: `(\d+\.\d+\.\d+)`/);
             return versionMatch ? versionMatch[1] : null;
