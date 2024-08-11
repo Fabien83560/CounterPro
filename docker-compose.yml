@@ -1,0 +1,8 @@
+version: '3'
+services:
+  bot:
+    build: .
+    container_name: counter-pro-bot
+    ports:
+      - "3000:3000"  # Ajustez les ports selon les besoins de votre bot
+    restart: always
