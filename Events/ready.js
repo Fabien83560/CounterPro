@@ -38,6 +38,11 @@ module.exports = async bot => {
             return versionMatch ? versionMatch[1] : null;
         }
 
+        function getMajorMinorVersion(version) {
+            const versionParts = version.split('.');
+            return versionParts.length >= 2 ? `${versionParts[0]}.${versionParts[1]}` : null;
+        }
+
         const version = getVersionFromReadme();
 
         if (!version) {
@@ -51,27 +56,32 @@ module.exports = async bot => {
         if (!lastVersion || version !== lastVersion) {
             await insertVersion(version);
 
-            const commit = await getLastCommit();
-            let embed = await getEmbed(
-                'INFO',
-                `A new version of ${bot.user.username} has been released (${version}).`,
-                `**${commit.commit.committer.name}** published a new update\nThe new functionality will allow __${commit.commit.message}__\n\nFor more information about the development of ${bot.user.username} go to the github: ${commit.author.html_url}/${bot.user.username}`
-            );
+            const majorMinorVersion = getMajorMinorVersion(version);
+            const lastMajorMinorVersion = lastVersion ? getMajorMinorVersion(lastVersion) : null;
+            if (!lastMajorMinorVersion || majorMinorVersion !== lastMajorMinorVersion) {
 
-            const response = await fetch(webhookUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    embeds: [embed]
-                })
-            });
+                const commit = await getLastCommit();
+                let embed = await getEmbed(
+                    'INFO',
+                    `A new version of ${bot.user.username} has been released (${version}).`,
+                    `**${commit.commit.committer.name}** published a new update\nThe new functionality will allow __${commit.commit.message}__\n\nFor more information about the development of ${bot.user.username} go to the github: ${commit.author.html_url}/${bot.user.username}`
+                );
 
-            if (response.ok) {
-                console.log('Message sent successfully via webhook!');
-            } else {
-                console.error('Failed to send message via webhook:', response.statusText);
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        embeds: [embed]
+                    })
+                });
+
+                if (response.ok) {
+                    console.log('Message sent successfully via webhook!');
+                } else {
+                    console.error('Failed to send message via webhook:', response.statusText);
+                }
             }
         }
 
