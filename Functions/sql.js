@@ -50,6 +50,67 @@ async function selectUserServerCounters(user_id, server_id) {
     }
 }
 
+async function selectDiscordServersLeaderboard() {
+    const query = "SELECT * FROM discord_servers";
+    const params = [];
+
+    try {
+        const results = await executeQuery(query, params);
+        return results;
+    } catch (error) {
+        console.error("Failed to select in discord_servers table:", error.message);
+    }
+}
+
+async function selectUsersLeaderboard() {
+    const query = "SELECT * FROM users";
+    const params = [];
+
+    try {
+        const results = await executeQuery(query, params);
+        return results;
+    } catch (error) {
+        console.error("Failed to select in users table:", error.message);
+    }
+}
+
+async function selectUsersPerServer(server_id) {
+    const query = "SELECT * FROM user_server_counters WHERE server_id = ?";
+    const params = [server_id];
+
+    try {
+        const results = await executeQuery(query, params);
+        return results;
+    } catch (error) {
+        console.error("Failed to select in user_server_counters table:", error.message);
+    }
+}
+
+async function selectUsernameByUserId(user_id) {
+    const query = "SELECT user_name FROM users WHERE user_id = ?";
+    const params = [user_id];
+
+    try {
+        const results = await executeQuery(query, params);
+        return results;
+    } catch (error) {
+        console.error(`Failed to select user_name in users for ${user_id} table:`, error.message);
+    }
+}
+
+async function selectServernameByServerId(server_id) {
+    const query = "SELECT server_name FROM discord_servers WHERE server_id = ?";
+    const params = [server_id];
+
+    try {
+        const results = await executeQuery(query, params);
+        return results;
+    } catch (error) {
+        console.error(`Failed to select server_name in discord_servers for ${server_id} table:`, error.message);
+    }
+}
+
+
 // INSERT
 async function insertVersion(version) {
     const query = "INSERT INTO version (version_number) VALUES (?)";
@@ -165,6 +226,11 @@ module.exports = {
     selectDiscordServers,
     selectUsers,
     selectUserServerCounters,
+    selectDiscordServersLeaderboard,
+    selectUsersLeaderboard,
+    selectUsersPerServer,
+    selectUsernameByUserId,
+    selectServernameByServerId,
 
     insertVersion,
     insertLog,
