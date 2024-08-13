@@ -4,7 +4,7 @@ CounterPro Bot is a Discord bot designed to help with counting games and various
 
 ## Version
 
-Current Version: `1.1.2`
+Current Version: `1.1.3`
 
 ## Features
 

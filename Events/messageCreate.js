@@ -1,32 +1,35 @@
 const getEmbed = require("../Functions/getEmbed");
 
-const { selectCounterTableByServerId, selectUsersByUserId, insertUser, insertUserServerCounter, updateUserServerCounter } = require("../Functions/sql")
+const { selectDiscordServers, selectUserServerCounters, selectUsers, insertUsers, insertUserServerCounters, updateAllCounter } = require("../Functions/sql")
 
 module.exports = async (bot, message) => {
     if (message.author.bot) return;
-    /*
-    const counterRows = await selectCounterTableByServerId(message.guild.id);
+    const serverRows = await selectDiscordServers(message.guild.id);
     
-    if (counterRows.length > 0) {
-        const counter = counterRows[0];
-        const currentChannelId = counter.channel_id;
+    if (serverRows.length > 0) {
+        const server = serverRows[0];
+        const currentChannelId = server.channel_counter_id;
 
         if (message.channel.id === currentChannelId) {
             const messageCount = parseInt(message.content.trim(), 10);
-            if (isNaN(messageCount) || messageCount !== counter.counter_value + 1 || message.author.id === counter.last_user_id) {
+            if (isNaN(messageCount) || messageCount !== server.counter_value + 1 || message.author.id === server.last_user_id) {
                 await message.delete();
                 return;
             }
 
-            let userRows = await selectUsersByUserId(message.author.id);
-
+            let userRows = await selectUsers(message.author.id)
             if (userRows.length === 0) {
-                await insertUser(message.author.id, message.author.username, 0);
-                await insertUserServerCounter(message.author.id, message.guild.id)
-                userRows = await selectUsersByUserId(message.author.id);
+                await insertUsers(message.author.id, message.author.username);
+                await insertUserServerCounters(message.author.id, message.guild.id)
             }
-            
-            await updateUserServerCounter(message.author.id, message.guild.id, 1);
+            else {
+                let userServerCounterRows = await selectUserServerCounters(message.author.id, message.guild.id);
+                if(userServerCounterRows.length === 0)
+                    await insertUserServerCounters(message.author.id, message.guild.id)
+            }
+            userRows = await selectUsers(message.author.id)
+
+            await updateAllCounter(message.guild.id, message.author.id, 1);
 
             await message.delete();
 
@@ -40,5 +43,4 @@ module.exports = async (bot, message) => {
             return await message.channel.send({ embeds: [successEmbed] });
         }
     }
-        */
 };

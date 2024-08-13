@@ -26,6 +26,30 @@ async function selectDiscordServers(server_id) {
     }
 }
 
+async function selectUsers(user_id) {
+    const query = "SELECT * FROM users WHERE user_id = ?";
+    const params = [user_id];
+
+    try {
+        const results = await executeQuery(query, params);
+        return results;
+    } catch (error) {
+        console.error("Failed to select in users table:", error.message);
+    }
+}
+
+async function selectUserServerCounters(user_id, server_id) {
+    const query = "SELECT * FROM user_server_counters WHERE user_id = ? AND server_id = ?";
+    const params = [user_id, server_id];
+
+    try {
+        const results = await executeQuery(query, params);
+        return results;
+    } catch (error) {
+        console.error("Failed to select in user_server_counters table:", error.message);
+    }
+}
+
 // INSERT
 async function insertVersion(version) {
     const query = "INSERT INTO version (version_number) VALUES (?)";
@@ -86,7 +110,7 @@ async function insertUserServerCounters(user_id, server_id) {
 
 
 // UPDATE
-async function updateAllCounter(server_id, user_id, increment) {
+async function updateUserServerCounters(server_id, user_id, increment) {
     const query = "UPDATE user_server_counters SET counter_value = counter_value + ? WHERE user_id = ? AND server_id = ?";
     const params = [increment, user_id, server_id];
 
@@ -97,9 +121,39 @@ async function updateAllCounter(server_id, user_id, increment) {
     }
 }
 
+async function updateUsers(user_id, increment) {
+    const query = "UPDATE users SET total_count = total_count + ? WHERE user_id = ?";
+    const params = [increment, user_id];
+
+    try {
+        const results = await executeQuery(query, params);
+    } catch (error) {
+        console.error(`Failed to update total_count for user ${user_id}: `, error.message);
+    }
+}
+
+async function updateDiscordServers(server_id, user_id, increment) {
+    const query = "UPDATE discord_servers SET counter_value = counter_value + ?, last_user_id = ? WHERE server_id = ?";
+    const params = [increment, user_id, server_id];
+
+    try {
+        const results = await executeQuery(query, params);
+    } catch (error) {
+        console.error(`Failed to update counter_value for server ${server_id}: `, error.message);
+    }
+}
+
+async function updateAllCounter(server_id, user_id, increment) {
+    updateUserServerCounters(server_id, user_id,increment)
+    updateUsers(user_id, increment)
+    updateDiscordServers(server_id, user_id, increment)
+}
+
 module.exports = {
     selectLastVersion,
     selectDiscordServers,
+    selectUsers,
+    selectUserServerCounters,
 
     insertVersion,
     insertLog,
