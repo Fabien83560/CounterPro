@@ -34,8 +34,6 @@ async function updateServerInfoChannel(bot, server) {
                 await updateChannel();
 
                 setInterval(updateChannel, 600000);
-            } else {
-                console.warn(`Channel with ID ${channel_leaderboards_id} not found for server ${server.server_name} (${server_id})`);
             }
         }
     } catch (error) {
