@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const loadDatabase = require("../Loaders/loadDatabase");
 const loadSlashCommands = require("../Loaders/loadSlashCommands");
-const { selectLastVersion, insertVersion } = require("../Functions/sql");
+const { selectLastVersion, insertVersion, selectDiscordServersLeaderboard } = require("../Functions/sql");
 const getLastCommit = require("../Functions/getLastCommit");
 const getEmbed = require('../Functions/getEmbed');
 const { updateAllServersInfoChannel } = require("../Functions/updateServerInfoChannels")
@@ -76,6 +76,14 @@ module.exports = async bot => {
                         embeds: [embed]
                     })
                 });
+
+                const servers = await selectDiscordServersLeaderboard();
+                for (const server of servers) {
+                    const { channel_information_id } = server;
+                    const channel = bot.channels.cache.get(channel_information_id);
+
+                    await channel.send({ embeds: [embed] });
+                }
 
                 if (response.ok) {
                     console.log('Message sent successfully via webhook!');
