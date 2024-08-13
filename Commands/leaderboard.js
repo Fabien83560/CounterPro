@@ -1,4 +1,5 @@
 const getEmbed = require("../Functions/getEmbed");
+const leaderboardServers = require("../Functions/Leaderboards/leaderboardServers")
 
 module.exports = {
 
@@ -35,23 +36,26 @@ module.exports = {
         const selectedOption = message.options.getString("option");
 
         let leaderboardText;
+        let embed;
         switch (selectedOption) {
             case "all":
                 leaderboardText = "Here is the leaderboard of all cross-server players.";
                 break;
             case "servers":
-                leaderboardText = "Here is the servers leaderboard.";
+                embed = await leaderboardServers();
                 break;
             case "here":
                 leaderboardText = `Here is the leaderboard for the server: ${message.guild.name}`;
                 break;
             default:
-                leaderboardText = "Invalid option selected.";
+                embed = await getEmbed(
+                    "ERROR",
+                    'ERROR',
+                    'An error occurred while retrieving data.',
+                );
         }
 
-        await message.reply({ 
-            embeds: [await getEmbed("INFO", "Leaderboard", leaderboardText)], 
-            ephemeral: true 
+        await message.reply({ embeds: [embed ? embed : await getEmbed("INFO", "Leaderboard", leaderboardText)], ephemeral: true 
         });
     }
 }

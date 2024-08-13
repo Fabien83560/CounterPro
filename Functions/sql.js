@@ -50,6 +50,19 @@ async function selectUserServerCounters(user_id, server_id) {
     }
 }
 
+async function selectDiscordServersLeaderboard() {
+    const query = "SELECT * FROM discord_servers";
+    const params = [];
+
+    try {
+        const results = await executeQuery(query, params);
+        return results;
+    } catch (error) {
+        console.error("Failed to select in discord_servers table:", error.message);
+    }
+}
+
+
 // INSERT
 async function insertVersion(version) {
     const query = "INSERT INTO version (version_number) VALUES (?)";
@@ -165,6 +178,7 @@ module.exports = {
     selectDiscordServers,
     selectUsers,
     selectUserServerCounters,
+    selectDiscordServersLeaderboard,
 
     insertVersion,
     insertLog,
