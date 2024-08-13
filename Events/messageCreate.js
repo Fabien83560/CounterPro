@@ -1,10 +1,10 @@
 const getEmbed = require("../Functions/getEmbed");
 
-const { selectCounterTableByServerId, selectUsersByUserId, insertUser, updateUser, updateCounter } = require("../Functions/sql")
+const { selectCounterTableByServerId, selectUsersByUserId, insertUser, insertUserServerCounter, updateUserServerCounter } = require("../Functions/sql")
 
 module.exports = async (bot, message) => {
     if (message.author.bot) return;
-
+    /*
     const counterRows = await selectCounterTableByServerId(message.guild.id);
     
     if (counterRows.length > 0) {
@@ -22,11 +22,11 @@ module.exports = async (bot, message) => {
 
             if (userRows.length === 0) {
                 await insertUser(message.author.id, message.author.username, 0);
+                await insertUserServerCounter(message.author.id, message.guild.id)
                 userRows = await selectUsersByUserId(message.author.id);
             }
             
-            await updateUser(message.author.id);
-            await updateCounter(messageCount, message.author.id, message.guild.id);
+            await updateUserServerCounter(message.author.id, message.guild.id, 1);
 
             await message.delete();
 
@@ -40,4 +40,5 @@ module.exports = async (bot, message) => {
             return await message.channel.send({ embeds: [successEmbed] });
         }
     }
+        */
 };

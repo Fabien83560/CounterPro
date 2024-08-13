@@ -69,6 +69,7 @@ module.exports = {
                             if (userRows.length === 0) {
                                 // Ajouter l'utilisateur s'il n'existe pas
                                 await insertUser(interaction.user.id, interaction.user.username, 0);
+                                await insertUserServerCounter(interaction.user.id, interaction.guild.id)
                             } else {
                                 // Incrémenter le total_count de l'utilisateur existant
                                 await updateUser(interaction.user.id);
