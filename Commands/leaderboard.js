@@ -1,6 +1,7 @@
 const getEmbed = require("../Functions/getEmbed");
 const leaderboardServers = require("../Functions/Leaderboards/leaderboardServers")
 const leaderboardUsers = require("../Functions/Leaderboards/leaderboardUsers")
+const leaderboardServer = require("../Functions/Leaderboards/leaderboardServer")
 
 module.exports = {
 
@@ -46,7 +47,7 @@ module.exports = {
                 embed = await leaderboardServers();
                 break;
             case "here":
-                leaderboardText = `Here is the leaderboard for the server: ${message.guild.name}`;
+                embed = await leaderboardServer(message.guild.id);
                 break;
             default:
                 embed = await getEmbed(
