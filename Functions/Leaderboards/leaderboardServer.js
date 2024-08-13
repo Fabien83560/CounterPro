@@ -22,11 +22,15 @@ async function leaderboardServer(server_id) {
                 description += `${index + 1}. **Unknown User** - \`${user.counter_value}\`\n`;
             }
         }
+
+        if(users.length === 0)
+            description = "No user has count on this server."
+
         const serverInfo = await selectServernameByServerId(server_id);
         const serverName = serverInfo[0]?.server_name || "Unknown server";
         const embed = await getEmbed(
             "DEFINED",
-            `Top 10 Users for Server __${serverName}__`,
+            `Top 10 Users for Server ${serverName}`,
             description,
             "#1E90FF"
         );

@@ -6,6 +6,7 @@ const {
 } = require('discord.js');
 const getEmbed = require("../Functions/getEmbed");
 const { insertDiscordServers, selectDiscordServers } = require("../Functions/sql");
+const { updateServerInfoChannel } = require("../Functions/updateServerInfoChannels")
 
 module.exports = {
     name: "setup",
@@ -142,6 +143,11 @@ module.exports = {
                         `The count has initialized at \`0\`.`,
                         "#1E90FF"
                     );
+
+                    const serverData = await selectDiscordServers(interaction.guild.id);
+                    const data = serverData[0]
+                    updateServerInfoChannel(bot, data);
+
                     await channel.send({ embeds: [initialCountEmbed] });
 
                     const finalEmbed = await getEmbed("DEFINED", "CounterPro Automatic Configuration Completed", `You can now count in the channel <#${countingChannel.id}>.\nThe channel <#${informationChannel.id}> is at your disposal to have all the information in real-time from CounterPro.\nFinally, the channel <#${leaderboardsChannel.id}> will be updated at regular intervals to display the leaderboards.`, "#1E90FF");
