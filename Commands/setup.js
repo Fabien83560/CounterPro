@@ -130,6 +130,20 @@ module.exports = {
 
                     await insertDiscordServers(interaction.guild.id, interaction.guild.name, countingChannel.id, informationChannel.id, leaderboardsChannel.id);
 
+                    const channel = await bot.channels.fetch(countingChannel.id);
+                    if (!channel) {
+                        console.error(`Channel with ID ${countingChannel.id} not found`);
+                        return;
+                    }
+            
+                    const initialCountEmbed = await getEmbed(
+                        "DEFINED",
+                        "CounterPro",
+                        `The count has initialized at \`0\`.`,
+                        "#1E90FF"
+                    );
+                    await channel.send({ embeds: [initialCountEmbed] });
+
                     const finalEmbed = await getEmbed("DEFINED", "CounterPro Automatic Configuration Completed", `You can now count in the channel <#${countingChannel.id}>.\nThe channel <#${informationChannel.id}> is at your disposal to have all the information in real-time from CounterPro.\nFinally, the channel <#${leaderboardsChannel.id}> will be updated at regular intervals to display the leaderboards.`, "#1E90FF");
                     await i.followUp({ embeds: [finalEmbed] });
 
