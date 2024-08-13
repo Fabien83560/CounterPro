@@ -62,6 +62,18 @@ async function selectDiscordServersLeaderboard() {
     }
 }
 
+async function selectUsersLeaderboard() {
+    const query = "SELECT * FROM users";
+    const params = [];
+
+    try {
+        const results = await executeQuery(query, params);
+        return results;
+    } catch (error) {
+        console.error("Failed to select in users table:", error.message);
+    }
+}
+
 
 // INSERT
 async function insertVersion(version) {
@@ -179,6 +191,7 @@ module.exports = {
     selectUsers,
     selectUserServerCounters,
     selectDiscordServersLeaderboard,
+    selectUsersLeaderboard,
 
     insertVersion,
     insertLog,

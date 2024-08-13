@@ -5,6 +5,7 @@ const loadSlashCommands = require("../Loaders/loadSlashCommands");
 const { selectLastVersion, insertVersion } = require("../Functions/sql");
 const getLastCommit = require("../Functions/getLastCommit");
 const getEmbed = require('../Functions/getEmbed');
+const leaderboardUsers = require('../Functions/Leaderboards/leaderboardUsers');
 
 const webhookUrl = 'https://discord.com/api/webhooks/1272309942522740766/N2e0Ovu5QELU5I_74R-k33wQt-ylY_mPw6BR7VyLyJJ_avIiLIoxndS8YOZ-F2V7Rquj'; // URL du webhook Discord
 

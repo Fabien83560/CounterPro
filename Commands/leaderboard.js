@@ -1,5 +1,6 @@
 const getEmbed = require("../Functions/getEmbed");
 const leaderboardServers = require("../Functions/Leaderboards/leaderboardServers")
+const leaderboardUsers = require("../Functions/Leaderboards/leaderboardUsers")
 
 module.exports = {
 
@@ -39,7 +40,7 @@ module.exports = {
         let embed;
         switch (selectedOption) {
             case "all":
-                leaderboardText = "Here is the leaderboard of all cross-server players.";
+                embed = await leaderboardUsers(bot);
                 break;
             case "servers":
                 embed = await leaderboardServers();
