@@ -149,6 +149,17 @@ async function updateAllCounter(server_id, user_id, increment) {
     updateDiscordServers(server_id, user_id, increment)
 }
 
+async function updateHexOfUser(user_id, newHex) {
+    const query = "UPDATE users SET hex = ? WHERE user_id = ?";
+    const params = [newHex, user_id];
+
+    try {
+        const results = await executeQuery(query, params);
+    } catch (error) {
+        console.error(`Failed to update hew for user ${user_id}: `, error.message);
+    }
+}
+
 module.exports = {
     selectLastVersion,
     selectDiscordServers,
@@ -161,5 +172,6 @@ module.exports = {
     insertUsers,
     insertUserServerCounters,
 
-    updateAllCounter
+    updateAllCounter,
+    updateHexOfUser
 };
