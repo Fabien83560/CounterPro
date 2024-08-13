@@ -1,18 +1,15 @@
 const Discord = require("discord.js");
 const getEmbed = require("../Functions/getEmbed");
 
-
 module.exports = async (bot, interaction) => {
-
-    // Gestion des options de complétion automatique
     if (interaction.type === Discord.InteractionType.ApplicationCommandAutocomplete) {
         let entry = interaction.options.getFocused();
-        if (interaction.commandName === "help") {
-            let choices = bot.commands.filter(cmd => cmd.name.includes(entry));
+
+        if (interaction.commandName === "leaderboard") {
+            const choices = ["all", "servers", "here"];
+            const filtered = choices.filter(choice => choice.startsWith(entry));
             await interaction.respond(
-                entry === "" ? 
-                bot.commands.map(cmd => ({ name: cmd.name, value: cmd.name })) : 
-                choices.map(choice => ({ name: choice.name, value: choice.name }))
+                filtered.map(choice => ({ name: choice, value: choice }))
             );
         }
     }
