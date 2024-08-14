@@ -6,7 +6,7 @@ async function leaderboardServer(server_id) {
         const users = await selectUsersPerServer(server_id);
 
         const topUsers = users
-            .sort((a, b) => b.total_count - a.total_count)
+            .sort((a, b) => b.counter_value - a.counter_value)
             .slice(0, 10);
 
         let description = 'Here are the top 10 users with the highest total counts for this server:\n';
