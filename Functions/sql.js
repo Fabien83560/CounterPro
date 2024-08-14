@@ -51,7 +51,7 @@ async function selectUserServerCounters(user_id, server_id) {
 }
 
 async function selectDiscordServersLeaderboard() {
-    const query = "SELECT * FROM discord_servers";
+    const query = "SELECT * FROM discord_servers ORDER BY counter_value DESC";
     const params = [];
 
     try {
@@ -63,7 +63,7 @@ async function selectDiscordServersLeaderboard() {
 }
 
 async function selectUsersLeaderboard() {
-    const query = "SELECT * FROM users";
+    const query = "SELECT * FROM users ORDER BY total_count DESC";
     const params = [];
 
     try {
@@ -75,7 +75,7 @@ async function selectUsersLeaderboard() {
 }
 
 async function selectUsersPerServer(server_id) {
-    const query = "SELECT * FROM user_server_counters WHERE server_id = ?";
+    const query = "SELECT * FROM user_server_counters WHERE server_id = ? ORDER BY counter_value DESC";
     const params = [server_id];
 
     try {
