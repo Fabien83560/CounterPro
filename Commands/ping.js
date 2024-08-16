@@ -1,5 +1,4 @@
 const getEmbed = require("../Functions/getEmbed");
-
 module.exports = {
 
     name: "ping",

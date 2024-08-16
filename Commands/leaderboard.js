@@ -44,10 +44,10 @@ module.exports = {
                 embed = await leaderboardUsers(bot);
                 break;
             case "servers":
-                embed = await leaderboardServers();
+                embed = await leaderboardServers(bot);
                 break;
             case "here":
-                embed = await leaderboardServer(message.guild.id);
+                embed = await leaderboardServer(bot, message.guild.id);
                 break;
             default:
                 embed = await getEmbed(

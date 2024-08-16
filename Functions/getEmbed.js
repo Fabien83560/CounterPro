@@ -19,7 +19,7 @@ module.exports = async (code, title, description, defined_color = "") => {
         .setTitle(title)
         .setDescription(description)
         .setTimestamp()
-        .setFooter({ text: ` CounterPro`, iconURL: 'https://cdn.discordapp.com/emojis/1271877957413114019.png' });
+        .setFooter({ text: ` CounterPro`, iconURL: "https://cdn.discordapp.com/emojis/1271877957413114019.png" });
 
     return Embed;
 }

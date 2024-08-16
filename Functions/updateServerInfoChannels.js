@@ -16,13 +16,13 @@ async function updateServerInfoChannel(bot, server) {
                         const fetchedMessages = await channel.messages.fetch({ limit: 100 });
                         await channel.bulkDelete(fetchedMessages);
 
-                        const serversEmbed = await leaderboardServers();
+                        const serversEmbed = await leaderboardServers(bot);
                         await channel.send({ embeds: [serversEmbed] });
 
-                        const usersEmbed = await leaderboardUsers();
+                        const usersEmbed = await leaderboardUsers(bot);
                         await channel.send({ embeds: [usersEmbed] });
 
-                        const serverEmbed = await leaderboardServer(server_id);
+                        const serverEmbed = await leaderboardServer(bot, server_id);
                         await channel.send({ embeds: [serverEmbed] });
 
                     } catch (error) {

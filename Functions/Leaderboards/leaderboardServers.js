@@ -1,7 +1,8 @@
 const getEmbed = require('../getEmbed');
 const { selectDiscordServersLeaderboard } = require("../sql")
+const getImgUrl = require('../../img/img_id')
 
-async function leaderboardServers() {
+async function leaderboardServers(bot) {
     try {
         const servers = await selectDiscordServersLeaderboard();
 
@@ -10,9 +11,16 @@ async function leaderboardServers() {
             .slice(0, 10);
 
         let description = 'Here are the 10 servers with the largest counter values :\n';
-        topServers.forEach((server, index) => {
-            description += `${index + 1}. **${server.server_name}** - \`${server.counter_value}\`\n`;
-        });
+
+        for (const [index, server] of topServers.entries()) {
+            try {        
+                const emoji = await getImgUrl(bot, `${index + 1}`) || `:${index + 1}:`;
+        
+                description += `${emoji} **${server.server_name}** - \`${server.counter_value}\`\n`;
+            } catch (error) {
+                description += `${index + 1}. **Unknown Server** - \`${server.counter_value}\`\n`;
+            }
+        }
 
         const embed = await getEmbed(
             "DEFINED",

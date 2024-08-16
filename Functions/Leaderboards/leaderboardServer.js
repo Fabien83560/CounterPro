@@ -1,7 +1,8 @@
 const getEmbed = require('../getEmbed');
 const { selectUsersPerServer, selectUsernameByUserId, selectServernameByServerId } = require('../sql');
+const getImgUrl = require('../../img/img_id')
 
-async function leaderboardServer(server_id) {
+async function leaderboardServer(bot, server_id) {
     try {
         const users = await selectUsersPerServer(server_id);
 
@@ -15,14 +16,16 @@ async function leaderboardServer(server_id) {
             try {
                 const userInfo = await selectUsernameByUserId(user.user_id);
                 const userName = userInfo[0]?.user_name || "Unknown User";
-
-                description += `${index + 1}. **${userName}** - \`${user.counter_value}\`\n`;
+        
+                const emoji = await getImgUrl(bot, `${index + 1}`) || `:${index + 1}:`;
+        
+                description += `${emoji} **${userName}** - \`${user.counter_value}\`\n`;
             } catch (error) {
                 console.error(`Failed to fetch username for user ID ${user.user_id}:`, error.message);
                 description += `${index + 1}. **Unknown User** - \`${user.counter_value}\`\n`;
             }
         }
-
+        
         if(users.length === 0)
             description = "No user has count on this server."
 
