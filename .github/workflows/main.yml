@@ -37,7 +37,7 @@ jobs:
                   databasePassword: "${{ secrets.DB_PASSWORD }}",
                   databaseName: "${{ secrets.DB_NAME }}",
                   databasePort: 3306,
-                  supportChannel: 1273048334939984024
+                  supportChannelId: '1273048334939984024'
               }' > /~/CounterPro/config.js
 
     - name: Restart Docker container
