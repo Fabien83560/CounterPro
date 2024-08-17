@@ -33,7 +33,7 @@ async function leaderboardServer(bot, server_id) {
         const serverName = serverInfo[0]?.server_name || "Unknown server";
         const embed = await getEmbed(
             "DEFINED",
-            `Top 10 Users for Server ${serverName}`,
+            `Top 10 Users for ${serverName}`,
             description,
             "#1E90FF"
         );

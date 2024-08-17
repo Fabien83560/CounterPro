@@ -31,7 +31,7 @@ async function leaderboardServers(bot) {
 
         return embed;
     } catch (error) {
-        console.error('Erreur lors de la récupération des données du leaderboard des serveurs:', error.message);
+        console.error('Error retrieving server leaderboard data:', error.message);
 
         const errorEmbed = await getEmbed(
             "ERROR",

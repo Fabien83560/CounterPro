@@ -1,9 +1,10 @@
 module.exports = {
-    token: "MEHGFYZTEHBJUZ545679ZZ9543ZFGHZJOEGFZ5EZ435ERFZYGHIEJZH5E67Z65ERFGZHIJ",
-    applicationClientId: "8732453627802673",
-    databaseHost: '79.99.30.12',
-    databaseUser: 'myUser',
-    databasePassword: 'myBigPassword',
-    databaseName: 'databaseName',
-    databasePort: 3306
+    token: "application_token",
+    applicationClientId: "application_id",
+    databaseHost: 'database_host_ip',
+    databaseUser: 'database_user',
+    databasePassword: 'database_password',
+    databaseName: 'database_name',
+    databasePort: 3306,
+    supportChannelId: 'support_channel_id'
 }
