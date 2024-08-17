@@ -8,7 +8,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 WORKDIR /var/www/html
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-COPY website/ .
+COPY . .
 
 RUN composer install
 
