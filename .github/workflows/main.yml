@@ -22,6 +22,12 @@ jobs:
         source: "."
         target: "/~/CounterPro"
 
+    - name: Retrieve current version from readme.md
+      id: get_version
+      run: |
+        version=$(grep -Po 'Current Version: `\K[0-9]+\.[0-9]+\.[0-9]+' readme.md)
+        echo "VERSION=$version" >> $GITHUB_ENV
+
     - name: Create config file on VPS for Bot
       uses: appleboy/ssh-action@v0.1.7
       with:
@@ -37,7 +43,8 @@ jobs:
                   databasePassword: "${{ secrets.DB_PASSWORD }}",
                   databaseName: "${{ secrets.DB_NAME }}",
                   databasePort: 3306,
-                  supportServerInvite: "https://discord.gg/u6w8HuzzgX"
+                  supportServerInvite: "https://discord.gg/u6w8HuzzgX",
+                  currentVersion: "${{ env.VERSION }}"
               }' > /~/CounterPro/application/config.js
 
     - name: Create .env file on VPS for Laravel

@@ -27,7 +27,7 @@ module.exports = async bot => {
         function getVersionFromReadme() {
             let readmePath = path.join(__dirname, '..', '..', 'readme.md');
             if(bot.user.username === "CounterPro")
-                readmePath = path.join(__dirname, '..', 'readme.md');
+                return config.currentVersion;
             
             if (!fs.existsSync(readmePath)) {
                 console.error(`File not found: ${readmePath}`);
