@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - website
 
 jobs:
   deploy:
@@ -22,7 +23,7 @@ jobs:
         source: "."
         target: "/~/CounterPro"
 
-    - name: Create config file on VPS
+    - name: Create config file on VPS for Bot
       uses: appleboy/ssh-action@v0.1.7
       with:
         host: ${{ secrets.HOST }}
@@ -40,7 +41,31 @@ jobs:
                   supportServerInvite: "https://discord.gg/u6w8HuzzgX"
               }' > /~/CounterPro/application/config.js
 
-    - name: Restart Docker container
+    - name: Create .env file on VPS for Laravel
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          echo 'APP_NAME="CounterPro"
+          APP_ENV=local
+          APP_KEY=${{ secrets.APP_KEY }}
+          APP_DEBUG=true
+          APP_URL=http://localhost
+          LOG_CHANNEL=stack
+          DB_CONNECTION=mysql
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_PORT=3306
+          DB_DATABASE=${{ secrets.DB_NAME }}
+          DB_USERNAME=${{ secrets.DB_USER }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          CACHE_DRIVER=file
+          SESSION_DRIVER=file
+          QUEUE_CONNECTION=sync
+          ' > /~/CounterPro/website/.env
+
+    - name: Restart Application container
       uses: appleboy/ssh-action@v0.1.7
       with:
         host: ${{ secrets.HOST }}
@@ -48,5 +73,16 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           cd /~/CounterPro/application
+          docker-compose down
+          docker-compose up -d --build
+
+    - name: Restart Website container
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /~/CounterPro/website
           docker-compose down
           docker-compose up -d --build

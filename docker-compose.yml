@@ -2,18 +2,22 @@ version: '3'
 services:
   application:
     build:
-      context: .
+      context: ./application
       dockerfile: Dockerfile
     container_name: counter-pro-bot
     ports:
       - "3000:3000"
+    volumes:
+      - ./application:/app
     restart: always
 
-  # website:
-  #   build:
-  #     context: ./website
-  #     dockerfile: Dockerfile
-  #   container_name: counter-pro-website
-  #   ports:
-  #     - "80:80"
-  #   restart: always
+  website:
+    build:
+      context: ./website
+      dockerfile: Dockerfile
+    container_name: counter-pro-website
+    ports:
+      - "80:80"
+    volumes:
+      - ./website:/var/www/html
+    restart: always
