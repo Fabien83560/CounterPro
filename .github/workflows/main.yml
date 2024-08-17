@@ -47,6 +47,6 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          cd /~/CounterPro
+          cd /~/CounterPro/application
           docker-compose down
           docker-compose up -d --build
