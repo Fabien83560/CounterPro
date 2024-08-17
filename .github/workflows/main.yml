@@ -64,24 +64,13 @@ jobs:
           QUEUE_CONNECTION=sync
           ' > /~/CounterPro/website/.env
 
-    - name: Restart Application container
+    - name: Restart Docker containers
       uses: appleboy/ssh-action@v0.1.7
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          cd /~/CounterPro/application
-          docker-compose down
-          docker-compose up -d --build
-
-    - name: Restart Website container
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          cd /~/CounterPro/website
+          cd /~/CounterPro/
           docker-compose down
           docker-compose up -d --build
