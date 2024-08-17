@@ -8,9 +8,14 @@ Current Version: `1.5.0`
 
 ## Features
 
-- Counting 
+- Setup channels bot
+- Counting
+- Different Leaderboards :
+    - All Servers
+    - All Users
+    - Each Server
 - Change counting color
 
 ## Setup
 
-To configure CounterPro on your Discord server, enter `/init` in the channel where you want to count.
+To configure CounterPro on your Discord server, enter `/setup`.

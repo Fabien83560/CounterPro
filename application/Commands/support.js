@@ -3,7 +3,7 @@ const {
     ButtonBuilder, 
     ButtonStyle } = require('discord.js');
     const getEmbed = require("../Functions/getEmbed");
-const config = require("../config");
+const config = require("../../config");
 
 module.exports = {
     name: "support",

@@ -1,8 +1,19 @@
 version: '3'
 services:
-  bot:
-    build: .
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: counter-pro-bot
     ports:
-      - "3000:3000"  # Ajustez les ports selon les besoins de votre bot
+      - "3000:3000"
     restart: always
+
+  # website:
+  #   build:
+  #     context: ./website
+  #     dockerfile: Dockerfile
+  #   container_name: counter-pro-website
+  #   ports:
+  #     - "80:80"
+  #   restart: always

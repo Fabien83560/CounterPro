@@ -1,6 +1,6 @@
 const getEmbed = require('../getEmbed');
 const { selectUsersPerServer, selectUsernameByUserId, selectServernameByServerId } = require('../sql');
-const getImgUrl = require('../../img/img_id')
+const getImgUrl = require('../../Functions/img_id')
 
 async function leaderboardServer(bot, server_id) {
     try {
