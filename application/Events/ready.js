@@ -25,7 +25,9 @@ module.exports = async bot => {
         await loadSlashCommands(bot);
 
         function getVersionFromReadme() {
-            const readmePath = path.join(__dirname, '..', '..', 'readme.md');
+            let readmePath = path.join(__dirname, '..', '..', 'readme.md');
+            if(bot.user.username === "CounterPro")
+                readmePath = path.join(__dirname, '..', 'readme.md');
             
             if (!fs.existsSync(readmePath)) {
                 console.error(`File not found: ${readmePath}`);

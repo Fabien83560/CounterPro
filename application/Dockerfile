@@ -4,6 +4,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 COPY . .
+COPY ../readme.md .
 
 RUN ls -l /usr/src/app
 
