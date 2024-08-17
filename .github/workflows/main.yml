@@ -38,7 +38,7 @@ jobs:
                   databaseName: "${{ secrets.DB_NAME }}",
                   databasePort: 3306,
                   supportServerInvite: "https://discord.gg/u6w8HuzzgX"
-              }' > /~/CounterPro/config.js
+              }' > /~/CounterPro/application/config.js
 
     - name: Restart Docker container
       uses: appleboy/ssh-action@v0.1.7
