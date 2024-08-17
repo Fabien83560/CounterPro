@@ -6,5 +6,5 @@ module.exports = {
     databasePassword: 'database_password',
     databaseName: 'database_name',
     databasePort: 3306,
-    supportChannelId: 'support_channel_id'
+    supportServerInvite: 'support_server_invite'
 }

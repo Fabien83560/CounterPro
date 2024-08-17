@@ -169,20 +169,6 @@ async function insertUserServerCounters(user_id, server_id) {
     }
 }
 
-async function insertSupport(user_id, type, message) {
-    const query = "INSERT INTO support (user_id, type, message) VALUES (?,?,?)";
-    const params = [user_id, type, message];
-
-    try {
-        const results = await executeQuery(query, params);
-        return results.insertId;
-    } catch (error) {
-        console.error(`Failed to insert in support table: `, error.message);
-        throw error;
-    }
-}
-
-
 
 // UPDATE
 async function updateUserServerCounters(server_id, user_id, increment) {
@@ -251,7 +237,6 @@ module.exports = {
     insertDiscordServers,
     insertUsers,
     insertUserServerCounters,
-    insertSupport,
 
     updateAllCounter,
     updateHexOfUser
