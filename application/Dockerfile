@@ -1,9 +1,9 @@
 FROM node:22.6.0
 
 WORKDIR /usr/src/app
-COPY application/package*.json ./
+COPY package*.json ./
 RUN npm install
-COPY application/ .
+COPY . .
 
 RUN ls -l /usr/src/app
 
