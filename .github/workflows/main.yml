@@ -3,18 +3,18 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - main  # Déclenche l'action sur un push vers la branche "main"
+      - main  # Triggers the action on a push to the "main" branch
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # Exécute le job sur la dernière version d'Ubuntu
+    runs-on: ubuntu-latest  # Runs the job on the latest version of Ubuntu
 
     steps:
-      # Étape 1: Récupération du code source
+      # Step 1: Checkout the source code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Étape 2: Copie des fichiers sur le serveur via SSH
+      # Step 2: Copy files to the server via SSH
       - name: Copy files via SSH
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -24,14 +24,14 @@ jobs:
           source: "."
           target: "/~/CounterPro"
 
-      # Étape 3: Récupération de la version actuelle à partir du fichier README
+      # Step 3: Retrieve the current version from the README file
       - name: Retrieve current version from readme.md
         id: get_version
         run: |
           version=$(grep -Po 'Current Version: `\K[0-9]+\.[0-9]+\.[0-9]+' readme.md)
           echo "VERSION=$version" >> $GITHUB_ENV
 
-      # Étape 4: Création du fichier de configuration pour le bot sur le VPS
+      # Step 4: Create the configuration file for the bot on the VPS
       - name: Create config file on VPS for Bot
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -51,7 +51,7 @@ jobs:
                     currentVersion: "${{ env.VERSION }}"
                 }' > /~/CounterPro/application/config.js
 
-      # Étape 5: Création du fichier .env pour Laravel sur le VPS
+      # Step 5: Create the .env file for Laravel on the VPS
       - name: Create .env file on VPS for Laravel
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -76,7 +76,7 @@ jobs:
             QUEUE_CONNECTION=sync
             ' > /~/CounterPro/website/.env
 
-      # Étape 6: Redémarrage des conteneurs Docker sur le VPS et nettoyage des images inutilisées
+      # Step 6: Restart Docker containers on the VPS and clean up unused images
       - name: Restart Docker containers
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -87,4 +87,4 @@ jobs:
             cd /~/CounterPro/
             docker-compose down
             docker-compose up -d --build
-            docker image prune -af  # Supprime les images Docker inutilisées
+            docker image prune -af  # Removes unused Docker images
