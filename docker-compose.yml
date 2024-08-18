@@ -12,6 +12,7 @@ services:
     restart: always
 
   website:
+    user: "www-data"
     build:
       context: ./website
       dockerfile: Dockerfile
