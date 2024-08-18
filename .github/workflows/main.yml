@@ -3,82 +3,88 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - main
+      - main  # Déclenche l'action sur un push vers la branche "main"
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Exécute le job sur la dernière version d'Ubuntu
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # Étape 1: Récupération du code source
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Copy files via SSH
-      uses: appleboy/scp-action@v0.1.4
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        source: "."
-        target: "/~/CounterPro"
+      # Étape 2: Copie des fichiers sur le serveur via SSH
+      - name: Copy files via SSH
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "."
+          target: "/~/CounterPro"
 
-    - name: Retrieve current version from readme.md
-      id: get_version
-      run: |
-        version=$(grep -Po 'Current Version: `\K[0-9]+\.[0-9]+\.[0-9]+' readme.md)
-        echo "VERSION=$version" >> $GITHUB_ENV
+      # Étape 3: Récupération de la version actuelle à partir du fichier README
+      - name: Retrieve current version from readme.md
+        id: get_version
+        run: |
+          version=$(grep -Po 'Current Version: `\K[0-9]+\.[0-9]+\.[0-9]+' readme.md)
+          echo "VERSION=$version" >> $GITHUB_ENV
 
-    - name: Create config file on VPS for Bot
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          echo 'module.exports = {
-                  token: "${{ secrets.BOT_TOKEN }}",
-                  applicationClientId: "${{ secrets.CLIENT_ID }}",
-                  databaseHost: "${{ secrets.DB_HOST }}",
-                  databaseUser: "${{ secrets.DB_USER }}",
-                  databasePassword: "${{ secrets.DB_PASSWORD }}",
-                  databaseName: "${{ secrets.DB_NAME }}",
-                  databasePort: 3306,
-                  supportServerInvite: "https://discord.gg/u6w8HuzzgX",
-                  currentVersion: "${{ env.VERSION }}"
-              }' > /~/CounterPro/application/config.js
+      # Étape 4: Création du fichier de configuration pour le bot sur le VPS
+      - name: Create config file on VPS for Bot
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo 'module.exports = {
+                    token: "${{ secrets.BOT_TOKEN }}",
+                    applicationClientId: "${{ secrets.CLIENT_ID }}",
+                    databaseHost: "${{ secrets.DB_HOST }}",
+                    databaseUser: "${{ secrets.DB_USER }}",
+                    databasePassword: "${{ secrets.DB_PASSWORD }}",
+                    databaseName: "${{ secrets.DB_NAME }}",
+                    databasePort: 3306,
+                    supportServerInvite: "https://discord.gg/u6w8HuzzgX",
+                    currentVersion: "${{ env.VERSION }}"
+                }' > /~/CounterPro/application/config.js
 
-    - name: Create .env file on VPS for Laravel
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          echo 'APP_NAME="CounterPro"
-          APP_ENV=local
-          APP_KEY=${{ secrets.APP_KEY }}
-          APP_DEBUG=true
-          APP_URL=http://localhost
-          LOG_CHANNEL=stack
-          DB_CONNECTION=mysql
-          DB_HOST=${{ secrets.DB_HOST }}
-          DB_PORT=3306
-          DB_DATABASE=${{ secrets.DB_NAME }}
-          DB_USERNAME=${{ secrets.DB_USER }}
-          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-          CACHE_DRIVER=file
-          SESSION_DRIVER=file
-          QUEUE_CONNECTION=sync
-          ' > /~/CounterPro/website/.env
+      # Étape 5: Création du fichier .env pour Laravel sur le VPS
+      - name: Create .env file on VPS for Laravel
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo 'APP_NAME="CounterPro"
+            APP_ENV=local
+            APP_KEY=${{ secrets.APP_KEY }}
+            APP_DEBUG=true
+            APP_URL=http://localhost
+            LOG_CHANNEL=stack
+            DB_CONNECTION=mysql
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_PORT=3306
+            DB_DATABASE=${{ secrets.DB_NAME }}
+            DB_USERNAME=${{ secrets.DB_USER }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            CACHE_DRIVER=file
+            SESSION_DRIVER=file
+            QUEUE_CONNECTION=sync
+            ' > /~/CounterPro/website/.env
 
-    - name: Restart Docker containers
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          cd /~/CounterPro/
-          docker-compose down
-          docker-compose up -d --build
-          docker image prune -af
+      # Étape 6: Redémarrage des conteneurs Docker sur le VPS et nettoyage des images inutilisées
+      - name: Restart Docker containers
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /~/CounterPro/
+            docker-compose down
+            docker-compose up -d --build
+            docker image prune -af  # Supprime les images Docker inutilisées
