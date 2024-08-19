@@ -7,8 +7,6 @@ services:
     container_name: counter-pro-bot
     ports:
       - "3000:3000"
-    volumes:
-      - ./application:/app
     restart: always
 
   website:
@@ -19,6 +17,4 @@ services:
     container_name: counter-pro-website
     ports:
       - "8001:80"
-    volumes:
-      - ./website:/var/www/html
     restart: always
