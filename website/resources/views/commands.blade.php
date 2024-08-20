@@ -2,12 +2,12 @@
 @section('title', 'Commands')
 @section('content')
 
-<div class="container mx-auto px-4 py-6">
-    <section class="mt-12">
+<div class="container mx-auto px-4 py-2">
+    <section class="mt-2">
         <div class="flex flex-wrap">
             <div class="w-full md:w-1/2 p-2">
                 <h2 class="text-2xl font-bold">CounterPro Commands</h2>
-                <p class="text-gray-700">Find all CounterProt commands and information you need fast and easy</p>
+                <p class="text-gray-600">Find all CounterProt commands and information you need fast and easy</p>
             </div>
             <!-- Google Ads -->
             <!-- <div class="w-full md:w-1/2 p-2">
@@ -73,9 +73,9 @@
                                 <b>/leaderboard option:</b><br/>
                                 Different options availables : <br/>
                                 <ul class="list-disc ml-5">
-                                    <li>all: Displays the leaderboard of all players combined.</li>
-                                    <li>servers: Displays the leaderboard of the different servers.</li>
-                                    <li>here: Displays the leaderboard on the server where you enter the command.</li>
+                                    <li><b>all:</b> Displays the leaderboard of all players combined.</li>
+                                    <li><b>servers:</b> Displays the leaderboard of the different servers.</li>
+                                    <li><b>here:</b> Displays the leaderboard on the server where you enter the command.</li>
                                 </ul>
                             </span>
                         </div>

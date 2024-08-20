@@ -1,29 +1,32 @@
 @extends('layouts.app')
 @section('title', 'Home')
 @section('content')
-<section class="bg-gray-800 py-16">
+<section class="bg-gray-800 py-4">
     <div class="container mx-auto px-4 flex flex-col md:flex-row items-center md:gap-x-32">
-        <div class="md:w-1/2">
+        <div class="md:w-1/2 text-center md:text-left">
             <h1 class="text-4xl font-bold text-teal-400">CounterPro</h1>
-            <p class="mt-4" style="text-indent: 1.5em;"><b>CounterPro</b> is a Discord bot designed for managing and monitoring <b>counting channels.</b> 
+            <p class="mt-4" style="text-indent: 1.5em;">
+                <b>CounterPro</b> is a Discord bot designed for managing and monitoring <b>counting channels.</b> 
                 It provides features to create <b>counting channels</b> where members can count numbers sequentially from 1. 
                 Additionally, <b>CounterPro</b> offers detailed <b>leaderboards</b>, allowing you to track performance in the <b>server</b>, 
                 <b>inter-server</b>, or <b>all players</b> stats. With <b>CounterPro</b>, communities can organize counting competitions, 
-                view leaderboards, and engage members in a fun and interactive way.</p>
-            <div class="mt-6">
+                view leaderboards, and engage members in a fun and interactive way.
+            </p>
+            <div class="mt-6 flex flex-col sm:flex-row gap-4 sm:justify-center">
                 <a href="https://discord.com/oauth2/authorize?client_id=1271798827682107475" class="bg-teal-400 text-gray-900 px-6 py-2 rounded-md hover:bg-teal-300">Invite Bot</a>
-                <a href="https://discord.gg/u6w8HuzzgX" class="ml-4 bg-gray-700 text-white px-6 py-2 rounded-md hover:bg-gray-600">Support Server</a>
+                <a href="https://discord.gg/u6w8HuzzgX" class="bg-gray-700 text-white px-6 py-2 rounded-md hover:bg-gray-600">Support Server</a>
             </div>
         </div>
 
-        <div class="md:w-1/2 flex flex-col justify-end items-center">
+        <div class="md:w-1/2 flex flex-col justify-center items-center mt-6">
             <div class="rounded-3xl overflow-hidden">
-                <img class="w-full sm:w-64 md:w-48 lg:w-64 xl:w-80" src="{{ asset('img/logo.png') }}" alt="CounterPro-logo">
+                <img class="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:w-80" src="{{ asset('img/logo.png') }}" alt="CounterPro-logo">
             </div>
             <p class="mt-4 text-gray-400 text-center">Bot active since August 2024</p>
         </div>
     </div>
 </section>
+
 
 <!-- Features -->
 <section id="Features" class="py-16">
@@ -61,9 +64,9 @@
         <h2 class="text-3xl font-bold text-center mb-10">Statistics</h2>
         <div class="flex flex-col md:flex-row justify-center items-center">
             <div class="md:w-1/3 mb-8 md:mb-0">
-                <img src="{{ asset('img/statics.png') }}" alt="Statics" class="w-full sm:w-64 md:w-48 lg:w-64 xl:w-80">
+                <img src="{{ asset('img/statics.png') }}" alt="Statics" class="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
             </div>
-            <div class="flex justify-around w-full md:w-2/3 text-center">
+            <div class="flex flex-col md:flex-row justify-around w-full md:w-2/3 text-center">
                 <div class="p-6">
                     <div class="text-5xl text-teal-400">
                         <i class="bi bi-hdd-stack text-primary"></i>
