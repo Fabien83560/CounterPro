@@ -87,6 +87,6 @@ jobs:
             cd /~/CounterPro/
             docker-compose down
             docker-compose up -d --build
-            docker build -t test-application ./application
-            docker run -p 3000:3000 test-application
+            docker-compose logs application
+            docker-compose logs website
             docker image prune -af  # Removes unused Docker images
