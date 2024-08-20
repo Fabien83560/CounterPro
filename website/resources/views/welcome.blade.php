@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Home')
 @section('content')
-<section class="bg-gray-800 py-16">
+<section class="bg-gray-800 py-4">
     <div class="container mx-auto px-4 flex flex-col md:flex-row items-center md:gap-x-32">
         <div class="md:w-1/2 text-center md:text-left">
             <h1 class="text-4xl font-bold text-teal-400">CounterPro</h1>
