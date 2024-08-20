@@ -110,6 +110,21 @@ async function selectServernameByServerId(server_id) {
     }
 }
 
+async function selectDiscordServersTotalCounterValues() {
+    const query = `
+        SELECT SUM(counter_value) AS total_counter_value FROM discord_servers
+    `;
+    const params = [];
+
+    try {
+        const results = await executeQuery(query, params);
+        return results;
+    } catch (error) {
+        console.error("Failed to select from discord_servers table:", error.message);
+        throw error;
+    }
+}
+
 
 // INSERT
 async function insertVersion(version) {
@@ -231,6 +246,7 @@ module.exports = {
     selectUsersPerServer,
     selectUsernameByUserId,
     selectServernameByServerId,
+    selectDiscordServersTotalCounterValues,
 
     insertVersion,
     insertLog,
