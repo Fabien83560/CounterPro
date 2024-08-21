@@ -71,6 +71,7 @@ jobs:
             DB_DATABASE=${{ secrets.DB_NAME }}
             DB_USERNAME=${{ secrets.DB_USER }}
             DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DISCORD_BOT_TOKEN=${{ secrets.BOT_TOKEN }}
             CACHE_DRIVER=file
             SESSION_DRIVER=file
             QUEUE_CONNECTION=sync

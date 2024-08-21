@@ -24,8 +24,7 @@ class UserController extends Controller
             'user_id' => 'required|string|max:100',
             'user_name' => 'required|string|max:100',
             'hex' => 'required|string|max:7',
-            'total_count' => 'nullable|integer',
-            'avatar_url' => 'nullable|string|max:255',
+            'total_count' => 'nullable|integer'
         ]);
 
         $user = User::create($validated);
@@ -38,8 +37,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'user_name' => 'sometimes|required|string|max:100',
             'hex' => 'sometimes|required|string|max:7',
-            'total_count' => 'sometimes|nullable|integer',
-            'avatar_url' => 'sometimes|nullable|string|max:255',
+            'total_count' => 'sometimes|nullable|integer'
         ]);
 
         $user = User::find($id);
