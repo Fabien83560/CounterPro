@@ -24,7 +24,7 @@
                 @foreach($servers as $index => $server)
                 <li class="cursor-pointer hover:bg-gray-600 flex items-center m-2 p-2 {{ $index % 2 == 0 ? 'bg-gray-800' : 'bg-gray-700' }} rounded-lg relative">
                     <a href="{{ url('/leaderboards/' . $server->server_id) }}" class="flex items-center w-full">
-                        <span class="min-w-[2rem] w-8 h-8 rounded-full flex items-center justify-center mr-2 font-bold text-white bg-teal-500 text-base">
+                        <span class="min-w-[2rem] w-8 h-8 rounded-full flex items-center justify-center mr-2 sm:mr-4 sm:ml-4 font-bold text-white bg-teal-500 text-base">
                             {{ $index + 1 }}
                         </span>
                         <span class="flex-1 text-white text-base ml-4">
@@ -51,7 +51,7 @@
                 @foreach($players as $index => $player)
                 <li class="cursor-pointer hover:bg-gray-600 flex items-center m-2 p-2 {{ $index % 2 == 0 ? 'bg-gray-800' : 'bg-gray-700' }} rounded-lg relative">
                     <a href="{{ url('/stats/' . $player->user_id) }}" class="flex items-center w-full">
-                        <span class="min-w-[2rem] w-8 h-8 rounded-full flex items-center justify-center mr-2 font-bold text-white bg-blue-500 text-base">
+                        <span class="min-w-[2rem] w-8 h-8 rounded-full flex items-center justify-center mr-2 sm:mr-4 sm:ml-4 font-bold text-white bg-blue-500 text-base">
                             {{ $index + 1 }}
                         </span>
                         <span class="flex-1 text-white text-base ml-4">
