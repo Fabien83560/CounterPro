@@ -3,10 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserServerCounter;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class UserServerCounterController extends Controller
 {
+    public function getRank($server_id, $user_id)
+    {
+        $userCounterValue = DB::table('user_server_counters')
+            ->where('server_id', $server_id)
+            ->where('user_id', $user_id)
+            ->value('counter_value');
+    
+        if ($userCounterValue === null) {
+            return null;
+        }
+    
+        $rank = DB::table('user_server_counters')
+            ->where('server_id', $server_id)
+            ->where('counter_value', '>', $userCounterValue)
+            ->count() + 1;
+    
+        return $rank;
+    } 
+
     public function show($userId, $serverId)
     {
         $counter = UserServerCounter::where('user_id', $userId)

@@ -10,8 +10,8 @@ class LeaderboardController extends Controller
 {  
     public function index()
     {
-        $players = User::orderBy('total_count', 'desc')->take(100)->get();
-        $servers = DiscordServer::orderBy('counter_value', 'desc')->take(100)->get();
+        $players = User::orderBy('total_count', 'desc')->get();
+        $servers = DiscordServer::orderBy('counter_value', 'desc')->get();
 
         return view('/leaderboards', ['players' => $players, 'servers' => $servers]);
     }
@@ -22,6 +22,9 @@ class LeaderboardController extends Controller
         if (!$server) {
             abort(404, 'Server not found');
         }
+
+        $discordServerController =  new DiscordServerController();
+        $server->rank = $discordServerController->getRank($server_id);
 
         $avatarUrl = $this->getDiscordServerAvatarUrl($server_id);
 

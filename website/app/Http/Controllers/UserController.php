@@ -17,6 +17,7 @@ class UserController extends Controller
         if (!$user) {
             abort(404, 'User not found');
         }
+        $user->rank = $this->getRank($user_id);
         
         $avatarUrl = $this->getDiscordAvatarUrl($user_id);
     
@@ -26,6 +27,12 @@ class UserController extends Controller
             ->where('user_server_counters.user_id', $user_id)
             ->orderBy('user_server_counters.counter_value', 'desc')
             ->get();
+
+        $userServerCounterController = new UserServerCounterController();
+
+        foreach ($serverCounters as $serverCounter) {
+            $serverCounter->rank = $userServerCounterController->getRank($serverCounter->server_id, $user_id);
+        }
         
         return view('statsUser', [
             'user' => $user,
@@ -68,7 +75,24 @@ class UserController extends Controller
     
         $defaultAvatarIndex = intval($user_id) % 5;
         return "https://cdn.discordapp.com/embed/avatars/{$defaultAvatarIndex}.png";
-    }          
+    }  
+    
+    public function getRank($user_id)
+    {
+        $userTotalCount = DB::table('users')
+            ->where('user_id', $user_id)
+            ->value('total_count');
+        
+        if ($userTotalCount === null) {
+            return null;
+        }
+        
+        $rank = DB::table('users')
+            ->where('total_count', '>', $userTotalCount)
+            ->count() + 1;
+    
+        return $rank;
+    }
 
     public function show($id)
     {
