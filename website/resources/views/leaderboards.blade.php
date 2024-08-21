@@ -22,12 +22,14 @@
             <h3 class="text-2xl font-semibold mb-4 text-white">Servers Leaderboard</h3>
             <ul>
                 @foreach($servers as $index => $server)
-                <li class="cursor-pointer hover:bg-gray-600 flex items-center m-2 p-2 {{ $index % 2 == 0 ? 'bg-gray-800' : 'bg-gray-700' }} rounded-lg">
+                <li class="cursor-pointer hover:bg-gray-600 flex items-center m-2 p-2 {{ $index % 2 == 0 ? 'bg-gray-800' : 'bg-gray-700' }} rounded-lg relative">
                     <a href="{{ url('/leaderboards/server/' . $server->server_id) }}" class="flex items-center w-full">
-                        <span class="min-w-[2rem] w-8 h-8 rounded-full flex items-center justify-center mr-4 font-bold text-white bg-teal-500 text-base ml-4">
+                        <span class="min-w-[2rem] w-8 h-8 rounded-full flex items-center justify-center mr-4 ml-4 font-bold text-white bg-teal-500 text-base">
                             {{ $index + 1 }}
                         </span>
-                        <span class="flex-1 text-white">{{ $server->server_name }} - {{ $server->counter_value }} count</span>
+                        <span class="absolute left-[50%] transform -translate-x-1/2 text-white">
+                            {{ $server->server_name }} - {{ $server->counter_value }} count
+                        </span>
                     </a>
                 </li>
                 @endforeach
@@ -39,12 +41,14 @@
             <h3 class="text-2xl font-semibold mb-4 text-white">Player Leaderboard</h3>
             <ul>
                 @foreach($players as $index => $player)
-                <li class="cursor-pointer hover:bg-gray-600 flex items-center m-2 p-2 {{ $index % 2 == 0 ? 'bg-gray-800' : 'bg-gray-700' }} rounded-lg">
+                <li class="cursor-pointer hover:bg-gray-600 flex items-center m-2 p-2 {{ $index % 2 == 0 ? 'bg-gray-800' : 'bg-gray-700' }} rounded-lg relative">
                     <a href="{{ url('/stats/' . $player->user_id) }}" class="flex items-center w-full">
-                        <span class="min-w-[2rem] w-8 h-8 rounded-full flex items-center justify-center mr-4 font-bold text-white bg-blue-500 text-base ml-4">
+                        <span class="min-w-[2rem] w-8 h-8 rounded-full flex items-center justify-center mr-4 ml-4 font-bold text-white bg-blue-500 text-base">
                             {{ $index + 1 }}
                         </span>
-                        <span class="flex-1 text-white">{{ $player->user_name }} - {{ $player->total_count }} count</span>
+                        <span class="absolute left-[50%] transform -translate-x-1/2 text-white">
+                            {{ $player->user_name }} - {{ $player->total_count }} count
+                        </span>
                     </a>
                 </li>
                 @endforeach
