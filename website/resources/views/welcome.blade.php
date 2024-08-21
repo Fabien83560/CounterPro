@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('meta_description','CounterPro is a Discord bot designed for managing and monitoring counting channels.It provides features to create counting channels where members can count numbers sequentially from 1.')
 @section('title', 'Home')
 @section('content')
 <section class="bg-gray-800 py-4">

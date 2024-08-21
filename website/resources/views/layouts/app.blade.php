@@ -4,12 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="@yield('meta_description', 'Description par défaut du site')">
+    <meta name="keywords" content="@yield('meta_keywords', 'discord, bot, counter, counterPro, leaderboards, competitive, fun, social, moderation')">
+    <meta name="author" content="Fabien Ortega">
+    <meta property="og:title" content="@yield('title') - CounterPro">
+    <meta property="og:description" content="@yield('meta_description', 'Description par défaut du site')">
+    <meta property="og:url" content="{{ url()->current() }}">
     <title>@yield('title') - CounterPro</title>
+    <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('img/logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </head>
+
 
 <body class="bg-gray-900 text-white">
 
