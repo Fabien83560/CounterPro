@@ -17,10 +17,13 @@
 
     <!-- Player Leaderboard -->
     <div class="border border-gray-300 bg-gray-900 p-6 rounded-lg mt-8">
-        <h3 class="text-2xl font-semibold mb-4 text-center text-white">
+        @if ($avatarUrl)
+            <img src="{{ $avatarUrl }}" alt="{{ $server->server_name }}'s Avatar" class="w-32 h-32 rounded-full object-cover mb-4 mx-auto" style="border: 2px solid #4fd1c5;">
+        @endif
+        <p class="text-xl text-center text-gray-300">Counter: {{ $server->counter_value }}</p>
+        <h3 class="text-lg sm:text-xl font-semibold mb-4 text-center text-white">
             Players Rankings for server <u>{{ $server->server_name }}</u>
         </h3>
-        <p class="text-xl text-center text-gray-300">Counter: {{ $server->counter_value }}</p>
         <hr class="my-6">
         <ul>
             @foreach($players as $index => $player)
