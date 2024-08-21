@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container mx-auto px-4 py-8">
-    <section class="mt-8 text-center">
+    <section class=" text-center">
         <h2 class="text-3xl font-bold mb-6">CounterPro Leaderboards</h2>
         <p class="text-gray-600 mb-8">Select a leaderboard to view the rankings.</p>
 
@@ -23,11 +23,11 @@
             <ul>
                 @foreach($servers as $index => $server)
                 <li class="cursor-pointer hover:bg-gray-600 flex items-center m-2 p-2 {{ $index % 2 == 0 ? 'bg-gray-800' : 'bg-gray-700' }} rounded-lg relative">
-                    <a href="{{ url('/leaderboards/server/' . $server->server_id) }}" class="flex items-center w-full">
+                    <a href="{{ url('/leaderboards/' . $server->server_id) }}" class="flex items-center w-full">
                         <span class="min-w-[2rem] w-8 h-8 rounded-full flex items-center justify-center mr-4 ml-4 font-bold text-white bg-teal-500 text-base">
                             {{ $index + 1 }}
                         </span>
-                        <span class="flex-1 text-white text-left md:text-center">
+                        <span class="flex-1 text-white text-left sm:text-center sm:absolute sm:left-1/2 sm:transform sm:-translate-x-1/2 md:text-base whitespace-nowrap">
                             {{ $server->server_name }} - {{ $server->counter_value }} count
                         </span>
                     </a>
@@ -46,7 +46,7 @@
                         <span class="min-w-[2rem] w-8 h-8 rounded-full flex items-center justify-center mr-4 ml-4 font-bold text-white bg-blue-500 text-base">
                             {{ $index + 1 }}
                         </span>
-                        <span class="flex-1 text-white text-left md:text-center">
+                        <span class="flex-1 text-white text-left sm:text-center sm:absolute sm:left-1/2 sm:transform sm:-translate-x-1/2 md:text-base whitespace-nowrap">
                             {{ $player->user_name }} - {{ $player->total_count }} count
                         </span>
                     </a>
