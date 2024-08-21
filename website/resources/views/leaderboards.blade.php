@@ -9,10 +9,10 @@
 
         <!-- Leaderboards Buttons -->
         <div class="flex justify-center space-x-4 mb-8">
-            <button id="serverLeaderboardBtn" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-4 px-8 rounded-lg">
+            <button id="serverLeaderboardBtn" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 sm:py-4 sm:px-8 rounded-lg">
                 View Servers Leaderboard
             </button>
-            <button id="playerLeaderboardBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg">
+            <button id="playerLeaderboardBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 sm:py-4 sm:px-8 rounded-lg">
                 View Player Leaderboard
             </button>
         </div>
@@ -27,7 +27,7 @@
                         <span class="min-w-[2rem] w-8 h-8 rounded-full flex items-center justify-center mr-4 ml-4 font-bold text-white bg-teal-500 text-base">
                             {{ $index + 1 }}
                         </span>
-                        <span class="absolute left-[50%] transform -translate-x-1/2 text-white">
+                        <span class="flex-1 text-white text-left md:text-center">
                             {{ $server->server_name }} - {{ $server->counter_value }} count
                         </span>
                     </a>
@@ -46,7 +46,7 @@
                         <span class="min-w-[2rem] w-8 h-8 rounded-full flex items-center justify-center mr-4 ml-4 font-bold text-white bg-blue-500 text-base">
                             {{ $index + 1 }}
                         </span>
-                        <span class="absolute left-[50%] transform -translate-x-1/2 text-white">
+                        <span class="flex-1 text-white text-left md:text-center">
                             {{ $player->user_name }} - {{ $player->total_count }} count
                         </span>
                     </a>
