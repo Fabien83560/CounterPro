@@ -3,10 +3,73 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Log;
+
 class UserController extends Controller
-{
+{  
+    public function stats($user_id)
+    {
+        $user = User::find($user_id);
+        if (!$user) {
+            abort(404, 'User not found');
+        }
+        
+        $avatarUrl = $this->getDiscordAvatarUrl($user_id);
+    
+        $serverCounters = DB::table('user_server_counters')
+            ->join('discord_servers', 'user_server_counters.server_id', '=', 'discord_servers.server_id')
+            ->select('user_server_counters.server_id', 'discord_servers.server_name', 'user_server_counters.counter_value')
+            ->where('user_server_counters.user_id', $user_id)
+            ->orderBy('user_server_counters.counter_value', 'desc')
+            ->get();
+        
+        return view('statsUser', [
+            'user' => $user,
+            'serverCounters' => $serverCounters,
+            'avatarUrl' => $avatarUrl
+        ]);
+    }
+
+    private function getDiscordAvatarUrl($user_id)
+    {
+        $token = env('DISCORD_BOT_TOKEN');
+        $url = "https://discord.com/api/v10/users/{$user_id}";
+        
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bot ' . $token,
+            ])->get($url);
+    
+            if ($response->successful()) {
+                $data = $response->json();
+                if (isset($data['avatar']) && $data['avatar']) {
+                    $avatarHash = $data['avatar'];
+                    return "https://cdn.discordapp.com/avatars/{$user_id}/{$avatarHash}.png";
+                } else {
+                    $discriminator = $data['discriminator'] ?? '0000';
+                    $defaultAvatarIndex = intval($discriminator) % 5;
+                    return "https://cdn.discordapp.com/embed/avatars/{$defaultAvatarIndex}.png";
+                }
+            } else {
+                \Log::error('Discord API Error', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                    'headers' => $response->headers(),
+                ]);
+            }
+    
+        } catch (\Exception $e) {
+            \Log::error('Failed to fetch Discord avatar URL: ' . $e->getMessage());
+        }
+    
+        $defaultAvatarIndex = intval($user_id) % 5;
+        return "https://cdn.discordapp.com/embed/avatars/{$defaultAvatarIndex}.png";
+    }          
+
     public function show($id)
     {
         $user = User::find($id);
