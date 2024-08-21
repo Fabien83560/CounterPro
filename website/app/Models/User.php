@@ -14,7 +14,8 @@ class User extends Model
         'user_id',
         'user_name',
         'hex',
-        'total_count'
+        'total_count',
+        'avatar_url'
     ];
     protected $primaryKey = 'user_id';
     public $incrementing = false;
