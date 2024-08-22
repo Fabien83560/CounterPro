@@ -56,7 +56,7 @@ module.exports = {
                 break;
             case "here":
                 embed = await leaderboardServer(bot, message.guild.id);
-                rank = await selectServerRank(message.user.id, message.guild.id);
+                rank = await selectUserServerRank(message.user.id, message.guild.id);
                 if(rank != -1)
                     embed.addFields({name: "\u200b", value: `Your Ranking Here: **#${rank}**`});
                 break;

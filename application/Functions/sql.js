@@ -196,7 +196,6 @@ async function selectUserServerRank(user_id, server_id) {
         WHERE user_id = ? AND server_id = ?;
     `;
     const checkParams = [user_id, server_id];
-
     try {
         const checkResults = await executeQuery(checkUserServerExistsQuery, checkParams);
         if (checkResults.length === 0) {
@@ -206,13 +205,13 @@ async function selectUserServerRank(user_id, server_id) {
         const rankQuery = `
             SELECT COUNT(*) AS count_above_threshold
             FROM user_server_counters
-            WHERE counter_value > (
+            WHERE server_id = ? AND counter_value > (
                 SELECT counter_value
                 FROM user_server_counters
                 WHERE user_id = ? AND server_id = ?
             );
         `;
-        const rankParams = [user_id, server_id];
+        const rankParams = [server_id, user_id, server_id];
         const rankResults = await executeQuery(rankQuery, rankParams);
 
         return rankResults[0].count_above_threshold + 1;
