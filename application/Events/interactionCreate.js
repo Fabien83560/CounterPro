@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const getEmbed = require("../Functions/getEmbed");
+const getServersHashmap = require("../Functions/getServersHashmap")
 
 module.exports = async (bot, interaction) => {
     if (interaction.type === Discord.InteractionType.ApplicationCommandAutocomplete) {
@@ -11,6 +12,19 @@ module.exports = async (bot, interaction) => {
             await interaction.respond(
                 filtered.map(choice => ({ name: choice, value: choice }))
             );
+        }
+
+        if (interaction.commandName === "invite") {
+            const focusedValue = interaction.options.getFocused();
+            const guilds = interaction.client.guilds.cache;
+            const choices = guilds
+                .filter(guild => guild.name.toLowerCase().includes(focusedValue.toLowerCase()))
+                .map(guild => ({
+                    name: guild.name,
+                    value: guild.id
+                }));
+        
+            await interaction.respond(choices);
         }
     }
 
