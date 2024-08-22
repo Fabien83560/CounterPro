@@ -138,24 +138,12 @@ async function insertVersion(version) {
     }
 }
 
-async function insertLog(type, message) {
-    const query = "INSERT INTO logs (log_date, type, message) VALUES (NOW(), ?, ?)";
-    const params = [type, message];
-
-    try {
-        const results = await executeQuery(query, params);
-    } catch (error) {
-        console.error("Failed to insert in logs table:", error.message);
-    }
-}
-
 async function insertDiscordServers(server_id, server_name, channel_counter_id, channel_information_id, channel_leaderboards_id) {
     const query = "INSERT INTO discord_servers (server_id, server_name, channel_counter_id, channel_information_id, channel_leaderboards_id) VALUES (?,?,?,?,?)";
     const params = [server_id, server_name, channel_counter_id, channel_information_id, channel_leaderboards_id];
 
     try {
         const results = await executeQuery(query, params);
-        insertLog("INFO", `Server ${server_name}(${server_id}) was added`)
     } catch (error) {
         console.error(`Failed to insert in discord_servers table: `, error.message);
     }
@@ -167,7 +155,6 @@ async function insertUsers(user_id, user_name) {
 
     try {
         const results = await executeQuery(query, params);
-        insertLog("INFO", `User ${user_name}(${user_id}) was added`)
     } catch (error) {
         console.error(`Failed to insert in users table: `, error.message);
     }
@@ -249,7 +236,6 @@ module.exports = {
     selectDiscordServersTotalCounterValues,
 
     insertVersion,
-    insertLog,
     insertDiscordServers,
     insertUsers,
     insertUserServerCounters,

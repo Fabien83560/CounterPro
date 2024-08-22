@@ -22,6 +22,7 @@ module.exports = {
                 value: commands.map(cmd => `\`${cmd.name}\` : ${cmd.description}`).join("\n")
             });
         });
+        Embed.setDescription("**website:** https://counterpro.ortegaf.fr");
 
         await message.reply({ embeds: [Embed], ephemeral: true});
     }

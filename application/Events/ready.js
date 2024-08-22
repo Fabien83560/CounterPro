@@ -59,32 +59,32 @@ module.exports = async bot => {
         if (!lastVersion || version !== lastVersion) {
             await insertVersion(version);
 
-            const commit = await getLastCommit();
-            let embed = await getEmbed(
-                'INFO',
-                `A new version of ${bot.user.username} has been released (${version}).`,
-                `**${commit.commit.committer.name}** published a new update\nThe new functionality will allow __${commit.commit.message}__\n\nFor more information about the development of ${bot.user.username} go to the github: https://github.com/Fabien83560/CounterPro`
-            );
-
-            const response = await fetch(webhookUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    embeds: [embed]
-                })
-            });
-
-            if (response.ok) {
-                console.log('Message sent successfully via webhook!');
-            } else {
-                console.error('Failed to send message via webhook:', response.statusText);
-            }
-
             const majorMinorVersion = getMajorMinorVersion(version);
             const lastMajorMinorVersion = lastVersion ? getMajorMinorVersion(lastVersion) : null;
             if (!lastMajorMinorVersion || majorMinorVersion !== lastMajorMinorVersion) {
+                const commit = await getLastCommit();
+                let embed = await getEmbed(
+                    'INFO',
+                    `A new version of ${bot.user.username} has been released (${version}).`,
+                    `**${commit.commit.committer.name}** published a new update\nThe new functionality will allow __${commit.commit.message}__\n\nFor more information about the development of ${bot.user.username} go to the github: https://github.com/Fabien83560/CounterPro`
+                );
+
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        embeds: [embed]
+                    })
+                });
+
+                if (response.ok) {
+                    console.log('Message sent successfully via webhook!');
+                } else {
+                    console.error('Failed to send message via webhook:', response.statusText);
+                }
+                
                 const servers = await selectDiscordServersLeaderboard();
                 for (const server of servers) {
                     const { channel_information_id } = server;
