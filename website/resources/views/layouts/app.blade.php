@@ -4,12 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="@yield('meta_description', 'Description par défaut du site')">
+    <meta name="keywords" content="@yield('meta_keywords', 'discord, bot, counter, counterPro, leaderboards, competitive, fun, social, moderation')">
+    <meta name="author" content="Fabien Ortega">
+    <meta property="og:title" content="@yield('title') - CounterPro">
+    <meta property="og:description" content="@yield('meta_description', 'Description par défaut du site')">
+    <meta property="og:url" content="{{ url()->current() }}">
     <title>@yield('title') - CounterPro</title>
+    <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('img/logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </head>
+
 
 <body class="bg-gray-900 text-white">
 
@@ -25,7 +34,8 @@
             <div id="nav-menu" class="hidden md:flex space-x-6">
                 <a href="{{ url('/') }}#Features" class="hover:text-teal-400">Features</a>
                 <a href="{{ url('/') }}#Statics" class="hover:text-teal-400">Statistics</a>
-                <a href="{{ url('/commands') }}" class="hover:text-teal-400 border-b-2 border-gray-700 md:border-none">Commands</a>
+                <a href="{{ url('/commands') }}" class="hover:text-teal-400">Commands</a>
+                <a href="{{ url('/leaderboards') }}" class="hover:text-teal-400">Leaderboards</a>
                 <div class="relative group">
                     <button class="inline-flex items-center hover:text-teal-400 focus:outline-none">
                         Links
@@ -59,6 +69,7 @@
                         <li><a href="{{ url('/') }}#Features" class="text-gray-300 text-xl hover:text-teal-400">Features</a></li>
                         <li><a href="{{ url('/') }}#Statics" class="text-gray-300 text-xl hover:text-teal-400">Statistics</a></li>
                         <li><a href="{{ url('/commands') }}" class="text-gray-300 text-xl hover:text-teal-400">Commands</a></li>
+                        <li><a href="{{ url('/leaderboards') }}" class="text-gray-300 text-xl hover:text-teal-400">Leaderboards</a></li>
                     </ul>
                 </div>
             </nav>
@@ -79,6 +90,7 @@
                         <li><a href="{{ url('/') }}#Features" class="hover:text-teal-400">Features</a></li>
                         <li><a href="{{ url('/') }}#Statistics" class="hover:text-teal-400">Statistics</a></li>
                         <li><a href="{{ url('/commands') }}" class="hover:text-teal-400">Commands</a></li>
+                        <li><a href="{{ url('/leaderboards') }}" class="hover:text-teal-400">Leaderboards</a></li>
                     </ul>
                 </div>
                 <div class="mb-4 md:mb-0">
@@ -109,9 +121,7 @@
                 </div>
             </div>
             <div class="text-center text-gray-600 mt-8">
-                Made by
-                <a href="https://github.com/Fabien83560/" class="hover:text-teal-400">ORTEGA Fabien</a>
-                © 2024 Copyright
+                Made by <a href="https://github.com/Fabien83560/" class="hover:text-teal-400">ORTEGA Fabien</a> © 2024 Copyright
             </div>
         </div>
     </footer>
