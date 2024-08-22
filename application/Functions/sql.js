@@ -111,9 +111,7 @@ async function selectServernameByServerId(server_id) {
 }
 
 async function selectDiscordServersTotalCounterValues() {
-    const query = `
-        SELECT SUM(counter_value) AS total_counter_value FROM discord_servers
-    `;
+    const query = "SELECT SUM(counter_value) AS total_counter_value FROM discord_servers";
     const params = [];
 
     try {
@@ -121,6 +119,105 @@ async function selectDiscordServersTotalCounterValues() {
         return results;
     } catch (error) {
         console.error("Failed to select from discord_servers table:", error.message);
+        throw error;
+    }
+}
+
+async function selectUserRank(user_id) {
+    const checkUserExistsQuery = `
+        SELECT 1
+        FROM users
+        WHERE user_id = ?;
+    `;
+    const checkParams = [user_id];
+
+    try {
+        const checkResults = await executeQuery(checkUserExistsQuery, checkParams);
+        if (checkResults.length === 0) {
+            return -1;
+        }
+
+        const rankQuery = `
+            SELECT COUNT(*) AS count_above_threshold
+            FROM users
+            WHERE total_count > (
+                SELECT total_count
+                FROM users
+                WHERE user_id = ?
+            );
+        `;
+        const rankParams = [user_id];
+        const rankResults = await executeQuery(rankQuery, rankParams);
+
+        return rankResults[0].count_above_threshold + 1;
+    } catch (error) {
+        console.error("Failed to select from users table:", error.message);
+        throw error;
+    }
+}
+
+async function selectServerRank(server_id) {
+    const checkServerExistsQuery = `
+        SELECT 1
+        FROM discord_servers
+        WHERE server_id = ?;
+    `;
+    const checkParams = [server_id];
+
+    try {
+        const checkResults = await executeQuery(checkServerExistsQuery, checkParams);
+        if (checkResults.length === 0) {
+            return -1;
+        }
+
+        const rankQuery = `
+            SELECT COUNT(*) AS count_above_threshold
+            FROM discord_servers
+            WHERE counter_value > (
+                SELECT counter_value
+                FROM discord_servers
+                WHERE server_id = ?
+            );
+        `;
+        const rankParams = [server_id];
+        const rankResults = await executeQuery(rankQuery, rankParams);
+
+        return rankResults[0].count_above_threshold + 1;
+    } catch (error) {
+        console.error("Failed to select from discord_servers table:", error.message);
+        throw error;
+    }
+}
+
+async function selectUserServerRank(user_id, server_id) {
+    const checkUserServerExistsQuery = `
+        SELECT 1
+        FROM user_server_counters
+        WHERE user_id = ? AND server_id = ?;
+    `;
+    const checkParams = [user_id, server_id];
+
+    try {
+        const checkResults = await executeQuery(checkUserServerExistsQuery, checkParams);
+        if (checkResults.length === 0) {
+            return -1;
+        }
+
+        const rankQuery = `
+            SELECT COUNT(*) AS count_above_threshold
+            FROM user_server_counters
+            WHERE counter_value > (
+                SELECT counter_value
+                FROM user_server_counters
+                WHERE user_id = ? AND server_id = ?
+            );
+        `;
+        const rankParams = [user_id, server_id];
+        const rankResults = await executeQuery(rankQuery, rankParams);
+
+        return rankResults[0].count_above_threshold + 1;
+    } catch (error) {
+        console.error("Failed to select from user_server_counters table:", error.message);
         throw error;
     }
 }
@@ -234,6 +331,9 @@ module.exports = {
     selectUsernameByUserId,
     selectServernameByServerId,
     selectDiscordServersTotalCounterValues,
+    selectUserRank,
+    selectServerRank,
+    selectUserServerRank,
 
     insertVersion,
     insertDiscordServers,
