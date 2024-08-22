@@ -75,7 +75,6 @@ module.exports = {
                         position: 1,
                         reason: 'Automatic configuration of CounterPro'
                     });
-
                     const informationChannel = await i.guild.channels.create({
                         name: '📌-ɪɴꜰᴏʀᴍᴀᴛɪᴏɴꜱ',
                         type: 0,
@@ -88,7 +87,7 @@ module.exports = {
                             },
                             {
                                 id: i.client.user.id,
-                                allow: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ReadMessageHistory],
+                                allow: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ReadMessageHistory, PermissionsBitField.Flags.ManageChannels],
                             },
                         ],
                         reason: 'Automatic configuration of CounterPro'
@@ -106,7 +105,7 @@ module.exports = {
                             },
                             {
                                 id: i.client.user.id,
-                                allow: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ReadMessageHistory],
+                                allow: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ReadMessageHistory, PermissionsBitField.Flags.ManageChannels],
                             },
                         ],
                         reason: 'Automatic configuration of CounterPro'
@@ -120,10 +119,12 @@ module.exports = {
                             {
                                 id: i.guild.id,
                                 allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ReadMessageHistory],
+                                deny: [PermissionsBitField.Flags.UseApplicationCommands]
                             },
                             {
                                 id: i.client.user.id,
-                                allow: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ReadMessageHistory],
+                                allow: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ReadMessageHistory, PermissionsBitField.Flags.ManageChannels],
+                                deny: [PermissionsBitField.Flags.UseApplicationCommands]
                             },
                         ],
                         reason: 'Automatic configuration of CounterPro'
