@@ -2,13 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const loadDatabase = require("../Loaders/loadDatabase");
 const loadSlashCommands = require("../Loaders/loadSlashCommands");
-const { selectLastVersion, insertVersion, selectDiscordServersLeaderboard, selectDiscordServers } = require("../Functions/sql");
+const { selectLastVersion, insertVersion, selectDiscordServersLeaderboard } = require("../Functions/sql");
 const getLastCommit = require("../Functions/getLastCommit");
 const getEmbed = require('../Functions/getEmbed');
 const { updateAllServersInfoChannel } = require("../Functions/updateServerInfoChannels")
 const webhookUrl = 'https://discord.com/api/webhooks/1272309942522740766/N2e0Ovu5QELU5I_74R-k33wQt-ylY_mPw6BR7VyLyJJ_avIiLIoxndS8YOZ-F2V7Rquj'; // URL du webhook Discord
 const config = require("../config")
-const { PermissionsBitField } = require('discord.js')
 
 module.exports = async bot => {
     const fetch = (await import('node-fetch')).default;
@@ -105,31 +104,7 @@ module.exports = async bot => {
 
         console.log("");
         console.log(`Bot Version: ${version ? version : 'Unknown'}`);
-        console.log(`${bot.user.username} : Online on ${bot.guilds.cache.size} servers!`);
-
-
-        {
-            const servers = bot.guilds.cache;
-            servers.forEach(async server => {
-                const serverId = server.id;
-                const serverInfos = await selectDiscordServers(serverId);
-                try {
-                    const channel_counter_id = serverInfos[0].channel_counter_id;
-                    const channel = bot.channels.cache.get(channel_counter_id);
-        
-                    if (channel) {
-                        await channel.permissionOverwrites.edit(server.id, {
-                            id: server.id,
-                            deny: [PermissionsBitField.Flags.UseApplicationCommands]
-                        });
-                        console.log(`Updated permissions for channel ${channel.name} in server ${server.name}`);
-                    }
-                } catch (error) {
-                    console.log(`${error} for server ${server.name}`);
-                }
-            });
-        }        
-
+        console.log(`${bot.user.username} : Online on ${bot.guilds.cache.size} servers!`);       
 
         await updateAllServersInfoChannel(bot);
     } catch (error) {
