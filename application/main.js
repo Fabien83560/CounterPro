@@ -16,7 +16,6 @@ bot.once('ready', async () => {
     const updateActivityWithDelay = async () => {
         try {
             const globalCount = await selectDiscordServersTotalCounterValues();
-            console.log(globalCount[0].total_counter_value)
             bot.user.setActivity({
                 name: `Global count: ${globalCount[0].total_counter_value}`,
                 type: Discord.ActivityType.Custom
