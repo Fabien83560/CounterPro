@@ -1,4 +1,4 @@
-const executeQuery = require('./executeQuery');
+const { executeQuery } = require('./executeQuery');
 const randomHEX = require('./randomHEX');
 
 // SELECT
@@ -269,43 +269,63 @@ async function insertUserServerCounters(user_id, server_id) {
 
 
 // UPDATE
-async function updateUserServerCounters(server_id, user_id, increment) {
+async function updateUserServerCounters(server_id, user_id, increment, connection) {
     const query = "UPDATE user_server_counters SET counter_value = counter_value + ? WHERE user_id = ? AND server_id = ?";
     const params = [increment, user_id, server_id];
 
     try {
-        const results = await executeQuery(query, params);
+        const [results] = await connection.query(query, params);
+        return results;
     } catch (error) {
-        console.error(`Failed to update all counters for user ${user_id} and server ${server_id}: `, error.message);
+        console.error(`Failed to update user_server_counters for user ${user_id} and server ${server_id}: `, error.message);
+        throw error;
     }
 }
 
-async function updateUsers(user_id, increment) {
+async function updateUsers(user_id, increment, connection) {
     const query = "UPDATE users SET total_count = total_count + ? WHERE user_id = ?";
     const params = [increment, user_id];
 
     try {
-        const results = await executeQuery(query, params);
+        const [results] = await connection.query(query, params);
+        return results;
     } catch (error) {
-        console.error(`Failed to update total_count for user ${user_id}: `, error.message);
+        console.error(`Failed to update users for user ${user_id}: `, error.message);
+        throw error;
     }
 }
 
-async function updateDiscordServers(server_id, user_id, increment) {
+async function updateDiscordServers(server_id, user_id, increment, connection) {
     const query = "UPDATE discord_servers SET counter_value = counter_value + ?, last_user_id = ? WHERE server_id = ?";
     const params = [increment, user_id, server_id];
 
     try {
-        const results = await executeQuery(query, params);
+        const [results] = await connection.query(query, params);
+        return results;
     } catch (error) {
-        console.error(`Failed to update counter_value for server ${server_id}: `, error.message);
+        console.error(`Failed to update discord_servers for server ${server_id}: `, error.message);
+        throw error;
     }
 }
 
-async function updateAllCounter(server_id, user_id, increment) {
-    updateUserServerCounters(server_id, user_id,increment)
-    updateUsers(user_id, increment)
-    updateDiscordServers(server_id, user_id, increment)
+async function updateAllCounter(server_id, user_id, increment, connection) {
+    try {
+        const lockQuery = "SELECT * FROM discord_servers WHERE server_id = ? FOR UPDATE";
+        const [lockResults] = await connection.query(lockQuery, [server_id]);
+
+        const userServerResults = await updateUserServerCounters(server_id, user_id, increment, connection);
+        const userResults = await updateUsers(user_id, increment, connection);
+        const serverResults = await updateDiscordServers(server_id, user_id, increment, connection);
+
+        if (userServerResults.affectedRows === 0 || userResults.affectedRows === 0 || serverResults.affectedRows === 0) {
+            throw new Error('Update failed for one or more queries.');
+        }
+
+        return { success: true };
+    } catch (error) {
+        console.error(`Failed to update all counters: ${error.message}`);
+        throw error;
+    }
 }
 
 async function updateHexOfUser(user_id, newHex) {
