@@ -1,16 +1,25 @@
-const Discord = require('discord.js');
-const intents = new Discord.IntentsBitField(3276799);
-const bot = new Discord.Client({ intents });
+const { Client, GatewayIntentBits, Events, ActivityType, Collection } = require('discord.js');
 const loadCommands = require("./Loaders/loadCommands");
 const loadEvents = require("./Loaders/loadEvents");
 const config = require("./config");
-const { selectDiscordServersTotalCounterValues } = require("./Functions/sql")
-bot.commands = new Discord.Collection();
+const { selectDiscordServersTotalCounterValues } = require("./Functions/sql");
+
+const bot = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+    ]
+});
+
+bot.commands = new Collection();
 
 bot.login(config.token);
 
 loadCommands(bot);
 loadEvents(bot);
+
+bot.on(Events.GuildUpdate, require('./Events/guildUpdate'));
 
 bot.once('ready', async () => {
     const updateActivityWithDelay = async () => {
@@ -18,14 +27,13 @@ bot.once('ready', async () => {
             const globalCount = await selectDiscordServersTotalCounterValues();
             bot.user.setActivity({
                 name: `Global count: ${globalCount[0].total_counter_value}`,
-                type: Discord.ActivityType.Custom
+                type: ActivityType.Custom
             });
-
         } catch (error) {
             console.error('Failed to update activity:', error.message);
         }
     };
-    await updateActivityWithDelay();
 
+    await updateActivityWithDelay();
     setInterval(updateActivityWithDelay, 30000);
 });
