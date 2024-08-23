@@ -339,6 +339,17 @@ async function updateHexOfUser(user_id, newHex) {
     }
 }
 
+async function updateDiscordServerInfos(server_id, server_name) {
+    const query = "UPDATE discord_servers SET server_name = ? WHERE server_id = ?";
+    const params = [server_name, server_id];
+
+    try {
+        const results = await executeQuery(query, params);
+    } catch (error) {
+        console.error(`Failed to update hew for user ${user_id}: `, error.message);
+    }
+}
+
 module.exports = {
     selectLastVersion,
     selectDiscordServers,
@@ -360,5 +371,6 @@ module.exports = {
     insertUserServerCounters,
 
     updateAllCounter,
-    updateHexOfUser
+    updateHexOfUser,
+    updateDiscordServerInfos
 };
