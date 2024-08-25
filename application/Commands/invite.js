@@ -5,7 +5,6 @@ const {
     ChannelType 
 } = require('discord.js');
 const getEmbed = require("../Functions/getEmbed");
-const { selectDiscordServers } = require("../Functions/sql");
 
 module.exports = {
     name: "invite",
@@ -51,7 +50,7 @@ module.exports = {
                 return;
             }
 
-            const inviteLink = await this.createInviteLink(bot, serverId);
+            const inviteLink = await this.createInviteLink(guild);
 
             const embed = await getEmbed("DEFINED", `${guild.name} Invite`, `Here is your invite link to join the server **${guild.name}**: [Click here](${inviteLink})`, "#1E90FF");
             
@@ -73,22 +72,14 @@ module.exports = {
         }
     },
 
-    async createInviteLink(bot, serverId) {
+    async createInviteLink(guild) {
         try {
-            const guild = await bot.guilds.fetch(serverId);
-            if (!guild) {
-                throw new Error("Server not found");
-            }
-    
-            const serverInfos = await selectDiscordServers(serverId);
-            if (!serverInfos || serverInfos.length === 0) {
-                throw new Error("No server information found");
-            }
+            const channel = guild.channels.cache.find(
+                (ch) => ch.type === ChannelType.GuildText && ch.viewable
+            );
 
-            const channelCounterId = serverInfos[0].channel_counter_id;
-            const channel = await guild.channels.fetch(channelCounterId);
-            if (!channel || channel.type !== ChannelType.GuildText) {
-                throw new Error("No text channel found with the provided ID in the server");
+            if (!channel) {
+                throw new Error("No accessible text channel found in the server");
             }
     
             const invite = await channel.createInvite({
