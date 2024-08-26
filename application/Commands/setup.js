@@ -225,17 +225,13 @@ module.exports = {
                 .setLabel('Automatic')
                 .setStyle(ButtonStyle.Success),
             new ButtonBuilder()
-                .setCustomId('custom_configuration')
-                .setLabel('Custom')
-                .setStyle(ButtonStyle.Primary),
-            new ButtonBuilder()
                 .setCustomId('cancel_configuration')
                 .setLabel('Cancel')
                 .setStyle(ButtonStyle.Danger)
         );
 
         const configurationResponse = await interaction.reply({ embeds: [embed], components: [row], fetchReply: true });
-        const filter = i => i.isButton() && ['automatic_configuration', 'custom_configuration', 'cancel_configuration'].includes(i.customId);
+        const filter = i => i.isButton() && ['automatic_configuration', 'cancel_configuration'].includes(i.customId);
         const collector = configurationResponse.createMessageComponentCollector({ filter, time: 60000 });
 
         collector.on('collect', async i => {
@@ -347,9 +343,6 @@ module.exports = {
                 } finally {
                     collector.stop();
                 }
-            } else if (i.customId === 'custom_configuration') {
-                const startingEmbed = await getEmbed("DEFINED", /*"Custom Initialization Started"*/"Custom Initialization", "Custom configuration is coming soon", "#1E90FF");
-                await i.update({ embeds: [startingEmbed], components: [] });
             } else {
                 console.error("An error occurred, the configuration button id is unknown:", i.customId);
                 collector.stop();
