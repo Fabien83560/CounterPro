@@ -350,6 +350,40 @@ async function updateDiscordServerInfos(server_id, server_name) {
     }
 }
 
+async function updateDiscordServerCounterChannel(server_id, channel_counter_id) {
+    const query = "UPDATE discord_servers SET channel_counter_id = ? WHERE server_id = ?";
+    const params = [channel_counter_id, server_id];
+
+    try {
+        const results = await executeQuery(query, params);
+    } catch (error) {
+        console.error(`Failed to update hew for user ${user_id}: `, error.message);
+    }
+}
+
+async function updateDiscordServerInformationChannel(server_id, channel_information_id) {
+    const query = "UPDATE discord_servers SET channel_information_id = ? WHERE server_id = ?";
+    const params = [channel_information_id, server_id];
+
+    try {
+        const results = await executeQuery(query, params);
+    } catch (error) {
+        console.error(`Failed to update hew for user ${user_id}: `, error.message);
+    }
+}
+
+async function updateDiscordServerLeaderboardsChannel(server_id, channel_leaderboards_id) {
+    const query = "UPDATE discord_servers SET channel_leaderboards_id = ? WHERE server_id = ?";
+    const params = [channel_leaderboards_id, server_id];
+
+    try {
+        const results = await executeQuery(query, params);
+    } catch (error) {
+        console.error(`Failed to update hew for user ${user_id}: `, error.message);
+    }
+}
+
+
 module.exports = {
     selectLastVersion,
     selectDiscordServers,
@@ -372,5 +406,8 @@ module.exports = {
 
     updateAllCounter,
     updateHexOfUser,
-    updateDiscordServerInfos
+    updateDiscordServerInfos,
+    updateDiscordServerCounterChannel,
+    updateDiscordServerInformationChannel,
+    updateDiscordServerLeaderboardsChannel
 };
