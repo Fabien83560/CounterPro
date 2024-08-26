@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 const getEmbed = require("../Functions/getEmbed");
-const getServersHashmap = require("../Functions/getServersHashmap")
 
 module.exports = async (bot, interaction) => {
     if (interaction.type === Discord.InteractionType.ApplicationCommandAutocomplete) {
