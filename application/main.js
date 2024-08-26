@@ -20,6 +20,7 @@ loadCommands(bot);
 loadEvents(bot);
 
 bot.on(Events.GuildUpdate, require('./Events/guildUpdate'));
+bot.on(Events.ChannelDelete, require('./Events/channelDelete'));
 
 bot.once('ready', async () => {
     const updateActivityWithDelay = async () => {
