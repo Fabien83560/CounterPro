@@ -2,10 +2,11 @@ const {
     PermissionsBitField,
     ActionRowBuilder,
     ButtonBuilder,
-    ButtonStyle
+    ButtonStyle,
+    StringSelectMenuBuilder
 } = require('discord.js');
 const getEmbed = require("../Functions/getEmbed");
-const { insertDiscordServers, selectDiscordServers } = require("../Functions/sql");
+const { insertDiscordServers, selectDiscordServers, updateDiscordServerCounterChannel, updateDiscordServerLeaderboardsChannel, updateDiscordServerInformationChannel } = require("../Functions/sql");
 const { updateServerInfoChannel } = require("../Functions/updateServerInfoChannels")
 
 module.exports = {
@@ -25,8 +26,195 @@ module.exports = {
 
         const serverRow = await selectDiscordServers(interaction.guild.id);
         if (serverRow.length > 0) {
-            const embed = await getEmbed("WARNING", "CounterPro Channels Already Exist", "CounterPro channels are already defined in your Discord server.");
-            return await interaction.reply({ embeds: [embed] });
+            const embed = await getEmbed("DEFINED", "Re-Configure CounterPro Channels", "CounterPro channels have been deleted, select the option that interests you.", "#1E90FF");
+            let row = new ActionRowBuilder().addComponents(
+                new ButtonBuilder()
+                    .setCustomId('counter_channel_configuration')
+                    .setLabel('Configure Counting')
+                    .setStyle(ButtonStyle.Success),
+                new ButtonBuilder()
+                    .setCustomId('leaderboards_channel_configuration')
+                    .setLabel('Configure Leaderboards')
+                    .setStyle(ButtonStyle.Primary),
+                new ButtonBuilder()
+                    .setCustomId('information_channel_configuration')
+                    .setLabel('Configure Information')
+                    .setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder()
+                    .setCustomId('cancel_configuration')
+                    .setLabel('Cancel')
+                    .setStyle(ButtonStyle.Danger)
+            );
+            
+            const configurationResponse = await interaction.reply({ embeds: [embed], components: [row], fetchReply: true });
+            const filter = i => i.isButton() && ['counter_channel_configuration', 'leaderboards_channel_configuration', 'information_channel_configuration', 'cancel_configuration'].includes(i.customId);
+            const collector = configurationResponse.createMessageComponentCollector({ filter, time: 60000 });
+
+            collector.on('collect', async i => {
+                if (i.user.id !== interaction.user.id) {
+                    return i.reply({ content: 'You are not allowed to interact with this message.', ephemeral: true });
+                }
+
+                if (i.customId === 'cancel_configuration') {
+                    try {
+                        const cancelEmbed = await getEmbed("DEFINED", "Re-Configure CounterPro Channel Canceled", `Configuration of channels was succesfully canceled`, "#1E90FF");
+                        await i.update({ embeds: [cancelEmbed], components: [] });
+                    } catch (error) {
+                        console.error("An error occurred while unconfiguring:", error.message);
+                    } finally {
+                        collector.stop();
+                    }
+                } else if (i.customId === 'counter_channel_configuration') {
+                    const server = i.guild;
+                    const textChannels = server.channels.cache.filter(channel => channel.type === 0);
+                
+                    const options = textChannels.map(channel => {
+                        return {
+                            label: channel.name,
+                            value: channel.id
+                        };
+                    });
+                
+                    if (options.length === 0) {
+                        return i.reply({ content: "No text channel avalaible", ephemeral: true });
+                    }
+                
+                    const selectMenu = new StringSelectMenuBuilder()
+                        .setCustomId('select_counting_channel')
+                        .setPlaceholder('Select text channel')
+                        .addOptions(options);
+                
+                    const row = new ActionRowBuilder().addComponents(selectMenu);
+                
+                    const countingEmbed = await getEmbed(
+                        "DEFINED",
+                        "Configure Counting Channel",
+                        `Counting channel for this server is actually ${serverRow[0].channel_counter_id ? `<#${serverRow[0].channel_counter_id}>` : `not defined `}. \n Select the counting channel from the drop-down list.`,
+                        "#1E90FF"
+                    );
+                
+                    i.update({ embeds: [countingEmbed], components: [row] });
+                } else if (i.customId === 'leaderboards_channel_configuration') {
+                    const server = i.guild;
+                    const textChannels = server.channels.cache.filter(channel => channel.type === 0);
+                
+                    const options = textChannels.map(channel => {
+                        return {
+                            label: channel.name,
+                            value: channel.id
+                        };
+                    });
+                
+                    if (options.length === 0) {
+                        return i.reply({ content: "No text channel avalaible", ephemeral: true });
+                    }
+                
+                    const selectMenu = new StringSelectMenuBuilder()
+                        .setCustomId('select_leaderboards_channel')
+                        .setPlaceholder('Select text channel')
+                        .addOptions(options);
+                
+                    const row = new ActionRowBuilder().addComponents(selectMenu);
+                
+                    const countingEmbed = await getEmbed(
+                        "DEFINED",
+                        "Configure Leaderboards Channel",
+                        `Leaderboards channel for this server is actually ${serverRow[0].channel_leaderboards_id ? `<#${serverRow[0].channel_leaderboards_id}>` : `not defined `}. \n Select the leaderboards channel from the drop-down list.`,
+                        "#1E90FF"
+                    );
+                
+                    i.update({ embeds: [countingEmbed], components: [row] });
+                } else if (i.customId === 'information_channel_configuration') {
+                    const server = i.guild;
+                    const textChannels = server.channels.cache.filter(channel => channel.type === 0);
+                
+                    const options = textChannels.map(channel => {
+                        return {
+                            label: channel.name,
+                            value: channel.id
+                        };
+                    });
+                
+                    if (options.length === 0) {
+                        return i.reply({ content: "No text channel avalaible", ephemeral: true });
+                    }
+                
+                    const selectMenu = new StringSelectMenuBuilder()
+                        .setCustomId('select_information_channel')
+                        .setPlaceholder('Select text channel')
+                        .addOptions(options);
+                
+                    const row = new ActionRowBuilder().addComponents(selectMenu);
+                
+                    const countingEmbed = await getEmbed(
+                        "DEFINED",
+                        "Configure Information Channel",
+                        `Information channel for this server is actually ${serverRow[0].channel_leaderboards_id ? `<#${serverRow[0].channel_leaderboards_id}>` : `not defined `}. \n Select the information channel from the drop-down list.`,
+                        "#1E90FF"
+                    );
+                
+                    i.update({ embeds: [countingEmbed], components: [row] });
+                }
+            });
+
+            let selectedCountingChannelId;
+            let selectedLeaderboardsChannelId;
+            let selectedInformationChannelId;
+
+            bot.on('interactionCreate', async interaction => {
+                if (!interaction.isStringSelectMenu()) return;
+
+                if (interaction.customId === 'select_counting_channel') {
+                    selectedCountingChannelId = interaction.values[0];
+
+                    const server = interaction.guild;
+                    await updateDiscordServerCounterChannel(server.id, selectedCountingChannelId)
+                    const finalEmbed = await getEmbed("DEFINED", "Counting Channel Setup", `Channel <#${selectedCountingChannelId}> was setup for new counting channel.`, "#1E90FF" )
+                    
+                    const channel = await bot.channels.fetch(selectedCountingChannelId);
+                    if (!channel) {
+                        console.error(`Channel with ID ${selectedCountingChannelId} not found`);
+                        return;
+                    }
+
+                    const serverInfo = await selectDiscordServers(server.id);
+
+                    const initialCountEmbed = await getEmbed(
+                        "DEFINED",
+                        "CounterPro",
+                        `The count value is \`${serverInfo[0].counter_value}\`.`,
+                        "#1E90FF"
+                    );
+                    channel.send({ embeds: [initialCountEmbed] })
+
+
+                    await interaction.update({ embeds: [finalEmbed], components: [] });
+                } else if (interaction.customId === 'select_leaderboards_channel') {
+                    selectedLeaderboardsChannelId = interaction.values[0];
+
+                    const server = interaction.guild;
+                    await updateDiscordServerLeaderboardsChannel(server.id, selectedLeaderboardsChannelId)
+                    const finalEmbed = await getEmbed("DEFINED", "Leaderboards Channel Setup", `Channel <#${selectedLeaderboardsChannelId}> was setup for new leaderboards channel.`, "#1E90FF" )
+
+                    const serverData = await selectDiscordServers(server.id);
+                    const data = serverData[0]
+                    await updateServerInfoChannel(bot, data);
+
+
+                    await interaction.update({ embeds: [finalEmbed], components: [] });
+                }  else if (interaction.customId === 'select_information_channel') {
+                    selectedInformationChannelId = interaction.values[0];
+
+                    const server = interaction.guild;
+                    await updateDiscordServerInformationChannel(server.id, selectedInformationChannelId)
+                    const finalEmbed = await getEmbed("DEFINED", "Information Channel Setup", `Channel <#${selectedInformationChannelId}> was setup for new leaderboards channel.`, "#1E90FF" )
+
+                    await interaction.update({ embeds: [finalEmbed], components: [] });
+                }
+            });
+
+
+            return;
         }
 
         let embed = await getEmbed("DEFINED", "Initialization of CounterPro", "Welcome to CounterPro initialization.\nHere you can choose the configuration possibilities.\nChoose the type of configuration best suited to your needs.", "#1E90FF");
