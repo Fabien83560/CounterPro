@@ -49,7 +49,7 @@ jobs:
                     databasePort: 3306,
                     supportServerInvite: "https://discord.gg/u6w8HuzzgX",
                     currentVersion: "${{ env.VERSION }}"
-                }' > /~/CounterPro/application/config.js
+                }' > /~/Docker/CounterPro/application/config.js
 
       # Step 5: Create the .env file for Laravel on the VPS
       - name: Create .env file on VPS for Laravel
@@ -75,7 +75,7 @@ jobs:
             CACHE_DRIVER=file
             SESSION_DRIVER=file
             QUEUE_CONNECTION=sync
-            ' > /~/CounterPro/website/.env
+            ' > /~/Docker/CounterPro/website/.env
 
       # Step 6: Restart Docker containers on the VPS and clean up unused images
       - name: Restart Docker containers
