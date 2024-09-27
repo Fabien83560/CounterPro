@@ -28,7 +28,7 @@ module.exports = {
                 allowed = true;
         });
 
-        if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) || allowed) {
+        if (!allowed) {
             const embed = await getEmbed("ERROR", "Insufficient permissions", "You need to be an administrator and in the developper list to use this command.");
             return interaction.reply({ embeds: [embed], ephemeral: true });
         }
