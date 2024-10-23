@@ -16,5 +16,5 @@ services:
       dockerfile: Dockerfile
     container_name: counter-pro-website
     ports:
-      - "8001:80"
+      - "5004:80"
     restart: always
