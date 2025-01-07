@@ -48,7 +48,8 @@ jobs:
                     databaseName: "${{ secrets.DB_NAME }}",
                     databasePort: 3306,
                     supportServerInvite: "https://discord.gg/u6w8HuzzgX",
-                    currentVersion: "${{ env.VERSION }}"
+                    currentVersion: "${{ env.VERSION }}",
+                    webhookUrl: "${{ secrets.WEBHOOKURL }}"
                 }' > /~/Docker/CounterPro/application/config.js
 
       # Step 5: Create the .env file for Laravel on the VPS

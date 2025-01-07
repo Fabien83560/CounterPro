@@ -6,7 +6,6 @@ const { selectLastVersion, insertVersion, selectDiscordServersLeaderboard } = re
 const getLastCommit = require("../Functions/getLastCommit");
 const getEmbed = require('../Functions/getEmbed');
 const { updateAllServersInfoChannel } = require("../Functions/updateServerInfoChannels")
-const webhookUrl = 'https://discord.com/api/webhooks/1272309942522740766/N2e0Ovu5QELU5I_74R-k33wQt-ylY_mPw6BR7VyLyJJ_avIiLIoxndS8YOZ-F2V7Rquj'; // URL du webhook Discord
 const config = require("../config")
 
 module.exports = async bot => {
@@ -69,7 +68,7 @@ module.exports = async bot => {
                     `**${commit.commit.committer.name}** published a new update\nThe new functionality will allow __${commit.commit.message}__\n\nFor more information about the development of ${bot.user.username} go to the github: https://github.com/Fabien83560/CounterPro`
                 );
 
-                const response = await fetch(webhookUrl, {
+                const response = await fetch(config.webhookUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
