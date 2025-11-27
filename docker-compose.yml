@@ -8,7 +8,9 @@ services:
     ports:
       - "3000:3000"
     restart: always
-
+    networks:
+      - mysql_mynetwork
+      
   website:
     user: "www-data"
     build:
@@ -18,3 +20,9 @@ services:
     ports:
       - "5008:80"
     restart: always
+    networks:
+      - mysql_mynetwork
+
+networks:
+  mysql_mynetwork:
+    external: true
