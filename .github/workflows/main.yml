@@ -22,7 +22,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "."
-          target: "/~/Docker/CounterPro"
+          target: "/home/${{ secrets.USERNAME }}/Docker/CounterPro"
 
       # Step 3: Retrieve the current version from the README file
       - name: Retrieve current version from readme.md
@@ -76,7 +76,7 @@ jobs:
             CACHE_DRIVER=file
             SESSION_DRIVER=file
             QUEUE_CONNECTION=sync
-            ' > /~/Docker/CounterPro/website/.env
+            ' > /home/${{ secrets.USERNAME }}/Docker/CounterPro/website/.env
 
       # Step 6: Restart Docker containers on the VPS and clean up unused images
       - name: Restart Docker containers
@@ -86,7 +86,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /~/Docker/CounterPro/
+            cd /home/${{ secrets.USERNAME }}/Docker/CounterPro
             docker-compose down
             docker-compose up -d --build
             docker-compose logs application
