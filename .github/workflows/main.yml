@@ -50,7 +50,7 @@ jobs:
                     supportServerInvite: "https://discord.gg/u6w8HuzzgX",
                     currentVersion: "${{ env.VERSION }}",
                     webhookUrl: "${{ secrets.WEBHOOKURL }}"
-                }' > /~/Docker/CounterPro/application/config.js
+                }' > /home/${{ secrets.USERNAME }}/Docker/CounterPro/application/config.js
 
       # Step 5: Create the .env file for Laravel on the VPS
       - name: Create .env file on VPS for Laravel
